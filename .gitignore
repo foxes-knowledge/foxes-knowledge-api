@@ -1,0 +1,17 @@
+# Managed by Composer
+vendor/
+
+###> phpunit/phpunit ###
+phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+
+###> laravel/laravel ###
+.env
+!.env*example
+###< laravel/laravel ###
+
+###> friendsofphp/php-cs-fixer ###
+.php-cs-fixer.php
+.php-cs-fixer.cache
+###< friendsofphp/php-cs-fixer ###
