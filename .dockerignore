@@ -1,0 +1,6 @@
+*.md
+.editorconfig
+.gitlab-ci.yml
+tests/_output/*
+tests/_support/_generated/*
+vendor
