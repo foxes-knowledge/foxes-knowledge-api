@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 
 networks:
     api-network:
@@ -31,9 +31,9 @@ services:
             - 5432:5432
         restart: always
         environment:
-            POSTGRES_DB: ${POSTGRES_DB:-database}
-            POSTGRES_USER: ${POSTGRES_USER:-myuser}
-            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mypassword}
+            POSTGRES_DB: ${DB_DATABASE:-database}
+            POSTGRES_USER: ${DB_USERNAME:-myuser}
+            POSTGRES_PASSWORD: ${DB_PASSWORD:-mypassword}
         healthcheck:
             test: [CMD-SHELL, pg_isready, -U, $POSTGRES_USER, -d, $POSTGRES_DB]
             interval: 30s
@@ -42,6 +42,18 @@ services:
             start_period: 80s
         volumes:
             - pg-storage:/var/lib/postgresql/data:rw
+        networks:
+            - api-network
+
+    swagger-ui:
+        container_name: swagger-ui
+        image: swaggerapi/swagger-ui:v4.11.1
+        ports:
+            - 8080:8080
+        volumes:
+            - ./doc:/usr/share/nginx/html/doc:ro
+        environment:
+            API_URL: doc/openapi.yaml
         networks:
             - api-network
 

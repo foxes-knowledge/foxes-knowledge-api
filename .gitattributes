@@ -1,3 +1,9 @@
 * text=auto
 * eol=lf
-*.md linguist-generated
+*.md diff=markdown
+*.blade.php diff=html
+*.css diff=css
+*.html diff=html
+*.php diff=php
+
+CHANGELOG.md export-ignore

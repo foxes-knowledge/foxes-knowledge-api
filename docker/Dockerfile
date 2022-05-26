@@ -2,13 +2,13 @@ FROM composer:2.3.5 AS build
 
 WORKDIR /build
 
-# COPY composer.* ./
+COPY composer.* ./
 
-# RUN composer install --no-dev --no-scripts --no-autoloader --ignore-platform-reqs
+RUN composer install --no-dev --no-scripts --no-autoloader --ignore-platform-reqs
 
 COPY . .
 
-# RUN composer dump-autoload --optimize
+RUN composer dump-autoload --optimize
 
 FROM php:8.1.6-fpm-alpine3.15 AS production
 
@@ -37,7 +37,7 @@ RUN S6_OVERLAY_RELEASE=https://github.com/just-containers/s6-overlay/releases/do
     && chmod -R +x /etc/services.d
 ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME=60000
 
-COPY docker/php /usr/local/etc/php
+COPY docker/local /usr/local
 COPY --from=build --chown=www-data:www-data /build /var/www/knowledge
 
 EXPOSE 80
