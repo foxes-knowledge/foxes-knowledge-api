@@ -1,4 +1,4 @@
-RESTful API built with Symfony framework for the "Foxes / Knowledge" project.
+RESTful API built with Laravel framework for the "Foxes / Knowledge" project.
 
 ## Starting the application with Docker
 
