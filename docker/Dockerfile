@@ -10,7 +10,7 @@ COPY . .
 
 RUN composer dump-autoload --optimize
 
-FROM php:8.1.6-fpm-alpine3.15 AS production
+FROM php:8.1.6-fpm-alpine3.16 AS production
 
 RUN apk add --no-cache --virtual .production-deps \
     nginx libpq
@@ -38,13 +38,16 @@ RUN S6_OVERLAY_RELEASE=https://github.com/just-containers/s6-overlay/releases/do
 ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME=60000
 
 COPY docker/local /usr/local
-COPY --from=build --chown=www-data:www-data /build /var/www/knowledge
+COPY --from=build --chown=www-data:www-data /build /var/www/foxes-knowledge
 
 EXPOSE 80
-WORKDIR /var/www/knowledge
+WORKDIR /var/www/foxes-knowledge
 ENTRYPOINT ["/init"]
 
 FROM production AS development
+
+RUN apk add --no-cache --virtual .development-deps \
+    postgresql14-client
 
 RUN set -xe \
     && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
