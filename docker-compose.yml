@@ -26,12 +26,12 @@ services:
 
     postgres:
         container_name: postgres
-        image: postgres:14.3-alpine3.16
+        image: postgres:14.3-alpine
         ports:
             - 5432:5432
         restart: always
         environment:
-            POSTGRES_DB: ${DB_DATABASE:-database}
+            POSTGRES_DB: ${DB_DATABASE:-foxes-knowledge}
             POSTGRES_USER: ${DB_USERNAME:-myuser}
             POSTGRES_PASSWORD: ${DB_PASSWORD:-mypassword}
         healthcheck:
