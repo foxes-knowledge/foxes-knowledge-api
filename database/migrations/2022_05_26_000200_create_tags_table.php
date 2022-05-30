@@ -16,6 +16,7 @@ return new class () extends Migration {
             $table->id();
             $table->foreignId('tag_id')->nullable()->constrained();
             $table->string('name', 24);
+            $table->string('color', 7);
             $table->timestamps();
         });
     }

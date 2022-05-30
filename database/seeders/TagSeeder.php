@@ -18,31 +18,39 @@ class TagSeeder extends Seeder
         $data = [
             [
                 'name' => 'JS',
+                'color' => '#F7DF1E'
             ],
             [
                 'tag_id' => 1,
                 'name' => 'React.js',
+                'color' => '#61DAFB'
             ],
             [
                 'tag_id' => 1,
                 'name' => 'Next.js',
+                'color' => '#000000'
             ],
             [
                 'name' => 'PHP',
+                'color' => '#777BB4'
             ],
             [
                 'tag_id' => 4,
                 'name' => 'Laravel',
+                'color' => '#FF2D20'
             ],
             [
                 'tag_id' => 4,
                 'name' => 'Symfony',
+                'color' => '#000000'
             ],
             [
                 'name' => 'PostgreSQL',
+                'color' => '#4169E1'
             ],
             [
                 'name' => 'MySQL',
+                'color' => '#4479A1'
             ],
         ];
 
