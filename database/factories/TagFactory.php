@@ -20,6 +20,7 @@ class TagFactory extends Factory
     {
         return [
             'name' => $this->faker->colorName(),
+            'color' => $this->faker->hexColor(),
         ];
     }
 }

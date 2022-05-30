@@ -18,14 +18,20 @@ class UserSeeder extends Seeder
     {
         $data = [
             [
-                'name' => 'PAXANDDOS',
+                'username' => 'PAXANDDOS',
+                'name' => 'Paul Litovka',
                 'email' => 'pashalitovka@gmail.com',
-                'password' => Hash::make('123456789')
+                'password' => Hash::make('123456789'),
+                'bio' => 'My best bio.',
+                'color' => '#5b92e5'
             ],
             [
-                'name' => 'navwie',
+                'username' => 'navwie',
+                'name' => 'Alesia Lykhovaya',
                 'email' => 'navwie@gmail.com',
-                'password' => Hash::make('123456789')
+                'password' => Hash::make('123456789'),
+                'bio' => 'My best bio with emoji 😀.',
+                'color' => '#ff6e4a'
             ]
         ];
 

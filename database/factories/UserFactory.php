@@ -19,10 +19,14 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
+            'username' => $this->faker->userName(),
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
-            'picture' => $this->faker->imageUrl(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+            'isEmailPublic' => $this->faker->boolean(30),
+            'picture' => $this->faker->imageUrl(),
+            'bio' => $this->faker->text(200),
+            'color' => $this->faker->hexColor(),
         ];
     }
 }
