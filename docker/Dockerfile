@@ -1,4 +1,4 @@
-FROM composer:2.3.5 AS build
+FROM composer:2 AS build
 
 WORKDIR /build
 
@@ -10,13 +10,13 @@ COPY . .
 
 RUN composer dump-autoload --optimize
 
-FROM php:8.1.6-fpm-alpine3.15 AS production
+FROM php:8.1.6-fpm-alpine3.16 AS production
 
-RUN apk add --no-cache --virtual .production-deps \
+RUN apk add --no-cache -t .production-deps \
     nginx libpq
 
 RUN set -xe \
-    && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
+    && apk add --no-cache -t .build-deps $PHPIZE_DEPS \
     libpq-dev \
     && pecl install -f apcu-5.1.21 \
     && docker-php-source extract \
@@ -26,7 +26,7 @@ RUN set -xe \
     && docker-php-source delete \
     && pecl clear-cache \
     && rm -rf /tmp/* \
-    && apk del .build-deps
+    && apk del --purge .build-deps
 
 COPY docker/etc /etc
 
@@ -38,20 +38,23 @@ RUN S6_OVERLAY_RELEASE=https://github.com/just-containers/s6-overlay/releases/do
 ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME=60000
 
 COPY docker/local /usr/local
-COPY --from=build --chown=www-data:www-data /build /var/www/knowledge
+COPY --from=build --chown=www-data:www-data /build /var/www/foxes-knowledge
 
 EXPOSE 80
-WORKDIR /var/www/knowledge
+WORKDIR /var/www/foxes-knowledge
 ENTRYPOINT ["/init"]
 
 FROM production AS development
 
+RUN apk add --no-cache -t .development-deps \
+    postgresql14-client
+
 RUN set -xe \
-    && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
+    && apk add --no-cache -t .build-deps $PHPIZE_DEPS \
     && pecl install -f xdebug-3.1.4 \
     && docker-php-ext-enable xdebug \
     && pecl clear-cache \
-    && apk del .build-deps
+    && apk del --purge .build-deps
 
 COPY docker/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 

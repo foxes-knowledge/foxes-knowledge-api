@@ -8,7 +8,7 @@ networks:
 services:
     knowledge-api:
         container_name: ${APP_NAME:-knowledge-api}
-        image: ${APP_NAME:-knowledge-api}:${APP_VERSION:-latest}
+        image: ${APP_NAME:-knowledge-api}:latest
         restart: unless-stopped
         build:
             context: .
@@ -17,7 +17,7 @@ services:
         ports:
             - 8000:80
         volumes:
-            - ./:/var/www/knowledge:rw
+            - ./:/var/www/foxes-knowledge:rw
         networks:
             - api-network
         depends_on:
@@ -26,16 +26,16 @@ services:
 
     postgres:
         container_name: postgres
-        image: postgres:14.3-alpine3.15
+        image: postgres:14.3-alpine
         ports:
             - 5432:5432
         restart: always
         environment:
-            POSTGRES_DB: ${DB_DATABASE:-database}
+            POSTGRES_DB: ${DB_DATABASE:-foxes-knowledge}
             POSTGRES_USER: ${DB_USERNAME:-myuser}
             POSTGRES_PASSWORD: ${DB_PASSWORD:-mypassword}
         healthcheck:
-            test: [CMD-SHELL, pg_isready, -U, $POSTGRES_USER, -d, $POSTGRES_DB]
+            test: [CMD-SHELL, pg_isready, -U, $DB_USERNAME, -d, $DB_DATABASE]
             interval: 30s
             timeout: 60s
             retries: 5

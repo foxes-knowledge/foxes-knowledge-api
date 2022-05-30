@@ -1,23 +1,21 @@
+# IDE
 /.idea
 /.vscode
+/_ide_helper*
+/.*.meta.*
 
 # Managed by Composer
 /vendor/
 
-###> phpunit/phpunit ###
-.phpunit.result.cache
-###< phpunit/phpunit ###
+# Caches
+/*.cache
 
 ###> laravel/laravel ###
 /public/hot
 /public/storage
 /storage/*.key
-.env
-.env.backup
-!.env*example
+/.env
+/.env.backup
+!/.env*example
 ###< laravel/laravel ###
 
-###> friendsofphp/php-cs-fixer ###
-.php-cs-fixer.php
-.php-cs-fixer.cache
-###< friendsofphp/php-cs-fixer ###
