@@ -83,7 +83,7 @@ class TagController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy( int $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         Tag::destroy($id);
 

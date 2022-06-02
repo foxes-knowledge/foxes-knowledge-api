@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 
-
 class PostController extends Controller
 {
     /**
