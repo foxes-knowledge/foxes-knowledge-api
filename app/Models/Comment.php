@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
@@ -15,12 +16,12 @@ class Comment extends Model
         'post_id'
     ];
 
-    public function user()
+    public function user(): Relation
     {
         return $this->belongsTo(User::class);
     }
 
-    public function post()
+    public function post(): Relation
     {
         return $this->belongsTo(Post::class);
     }

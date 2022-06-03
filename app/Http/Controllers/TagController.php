@@ -5,90 +5,54 @@ namespace App\Http\Controllers;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Http\JsonResponse;
 
 class TagController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function index(): JsonResponse
+    public function index(): Response
     {
-        return new JsonResponse(
-            Tag::all(),
-            Response::HTTP_OK
-        );
-    }
+        $tags = Tag::with(['posts', 'parent'])->get();
 
+        return response($tags);
+    }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request): Response
     {
-        $data = $request->all();
-        $tag = Tag::create($data);
+        $tag = Tag::create($request->all());
 
-        if (isset($data['post_id'])) {
-            $tag->parent()->save($data['tag_id']);
-        }
-        $tag->save();
-
-
-        return new JsonResponse([
-            'created' => true,
-        ], Response::HTTP_CREATED);
+        return response($tag, Response::HTTP_CREATED);
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
      */
-    public function show($id): JsonResponse
+    public function show(Tag $tag): Response
     {
-        return new JsonResponse([
-            Tag::findOrFail($id)
-        ], Response::HTTP_CREATED);
+        return response(Tag::with(['posts', 'parent'])->find($tag->id));
     }
-
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, int $id): JsonResponse
+    public function update(Request $request, Tag $tag): Response
     {
-        $tag = Tag::FindOrFail($id);
-        $data = $request->all();
-        $tag->fill($data)->save();
+        $tag->update($request->all());
 
-        return new JsonResponse([
-            'updated' => true
-        ], Response::HTTP_OK);
+        return response($tag, Response::HTTP_CREATED);
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(Tag $tag): Response
     {
-        Tag::destroy($id);
+        $tag->delete();
 
-        return new JsonResponse([
-            'deleted' => true,
-        ], Response::HTTP_OK);
+        return response([], Response::HTTP_NO_CONTENT);
     }
 }

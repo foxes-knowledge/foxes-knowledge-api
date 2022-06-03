@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -11,86 +10,49 @@ class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function index(): JsonResponse
+    public function index(): Response
     {
-        $users = User::with([
-            'posts',
-        ])->get();
+        $users = User::with('posts')->get();
 
-        return new JsonResponse(
-            $users,
-            Response::HTTP_OK
-        );
+        return response($users);
     }
-
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request): Response
     {
-        $data = $request->all();
-        User::create($data);
+        $user = User::create($request->all());
 
-        return new JsonResponse([
-            'created' => true,
-        ], Response::HTTP_CREATED);
+        return response($user, Response::HTTP_CREATED);
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
      */
-    public function show(int $id): JsonResponse
+    public function show(User $user): Response
     {
-        $user = User::with([
-            'posts',
-        ])->findOrFail($id);
-
-
-        return new JsonResponse([
-            $user
-        ], Response::HTTP_CREATED);
+        return response(User::with('posts')->find($user->id));
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, int $id): JsonResponse
+    public function update(Request $request, User $user): Response
     {
-        $user = User::FindOrFail($id);
-        $data = $request->all();
-        $user->fill($data)->save();
+        $user->update($request->all());
 
-        return new JsonResponse([
-            'updated' => true
-        ], Response::HTTP_OK);
+        return response($user, Response::HTTP_CREATED);
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(User $user): Response
     {
-        User::destroy($id);
+        $user->delete();
 
-        return new JsonResponse([
-            'deleted' => true,
-        ], Response::HTTP_OK);
+        return response([], Response::HTTP_NO_CONTENT);
     }
 }

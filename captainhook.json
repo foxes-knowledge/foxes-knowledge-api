@@ -14,6 +14,11 @@
                 "action": "php artisan fixer:fix --rules=@PSR12",
                 "options": [],
                 "conditions": []
+            },
+            {
+                "action": "php vendor/bin/phpstan analyze",
+                "options": [],
+                "conditions": []
             }
         ]
     },

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\Model;
 
 class Tag extends Model
@@ -14,12 +15,12 @@ class Tag extends Model
         'color'
     ];
 
-    public function posts()
+    public function posts(): Relation
     {
         return $this->belongsToMany(Post::class);
     }
 
-    public function parent()
+    public function parent(): Relation
     {
         return $this->hasOne(Tag::class, 'tag_id');
     }
