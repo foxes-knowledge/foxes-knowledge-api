@@ -18,6 +18,8 @@
         "fakerphp/faker": "^1.19",
         "friendsofphp/php-cs-fixer": "^3.8",
         "nunomaduro/collision": "^6.2",
+        "nunomaduro/larastan": "^2.1",
+        "phpstan/phpstan": "^1.7",
         "phpunit/phpunit": "^9.5",
         "spatie/laravel-ignition": "^1.0",
         "stechstudio/laravel-php-cs-fixer": "^3.1"
@@ -51,6 +53,12 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
+        ],
+        "lint": [
+            "phpstan analyze"
+        ],
+        "format": [
+            "@php artisan fixer:fix --rules=@PSR12"
         ]
     },
     "extra": {

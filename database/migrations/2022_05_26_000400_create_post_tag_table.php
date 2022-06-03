@@ -3,6 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Post;
+use App\Models\Tag;
 
 return new class () extends Migration {
     /**
@@ -14,8 +16,8 @@ return new class () extends Migration {
     {
         Schema::create('post_tag', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('post_id')->constrained();
-            $table->foreignId('tag_id')->constrained();
+            $table->foreignIdFor(Post::class)->constrained();
+            $table->foreignIdFor(Tag::class)->constrained();
         });
     }
 

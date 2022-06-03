@@ -5,106 +5,61 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Http\JsonResponse;
 
 class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function index(): JsonResponse
+    public function index(): Response
     {
-        $posts = Post::with([
-            'user',
-            'parent',
-            'tags',
-            'comments'
-        ])->get();
+        $posts = Post::with(['user', 'tags', 'parent'])->get();
 
-        return new JsonResponse(
-            $posts,
-            Response::HTTP_OK
-        );
+        return response($posts);
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request): Response
     {
-        $data = $request->all();
-        $post = Post::create($data);
-        $post->user()->associate($data['user_id']);
+        $post = Post::create($request->all());
 
-        if (isset($data['post_id'])) {
-            $post->parent()->save($data['post_id']);
+        if ($post_id = $request->get('post_id')) {
+            $post->parent()->save(new Post(['id' => $post_id]));
         }
 
-        $post->tags()->attach($data['tag_id']);
+        $post->tags()->attach($request->get('tag_id'));
         $post->save();
 
-
-        return new JsonResponse([
-            'created' => true,
-        ], Response::HTTP_CREATED);
+        return response($post, Response::HTTP_CREATED);
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
      */
-    public function show(int $id): JsonResponse
+    public function show(Post $post): Response
     {
-        $post = Post::with([
-            'user',
-            'parent',
-            'tags',
-            'comments'
-        ])->findOrFail($id);
-
-        return new JsonResponse([
-            $post,
-        ], Response::HTTP_CREATED);
+        return response(Post::with(['user', 'tags', 'parent'])->find($post->id));
     }
-
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id): JsonResponse
+    public function update(Request $request, Post $post): Response
     {
-        $post = Post::FindOrFail($id);
-        $data = $request->all();
-        $post->fill($data)->save();
+        $post->update($request->all());
 
-        return new JsonResponse([
-            'updated' => true
-        ], Response::HTTP_OK);
+        return response($post, Response::HTTP_CREATED);
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(Post $post): Response
     {
-        Post::destroy($id);
+        $post->delete();
 
-        return new JsonResponse([
-            'deleted' => true,
-        ], Response::HTTP_OK);
+        return response([], Response::HTTP_NO_CONTENT);
     }
 }

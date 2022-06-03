@@ -2,64 +2,57 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attachment;
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 
 class AttachmentController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Display a listing of the attachments.
      */
-    public function index()
+    public function index(): Response
     {
-        //
-    }
+        $attachments = Attachment::with('post')->get();
 
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        return response($attachments);
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * Store a newly created attachment in storage.
      */
-    public function show($id)
+    public function store(Request $request): Response
     {
-        //
-    }
+        $attachment = Attachment::create($request->all());
 
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+        return response($attachment, Response::HTTP_CREATED);
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * Display the attachment.
      */
-    public function destroy($id)
+    public function show(Attachment $attachment): Response
     {
-        //
+        return response(Attachment::with('post')->find($attachment->id));
+    }
+
+    /**
+     * Update the attachment in storage.
+     */
+    public function update(Request $request, Attachment $attachment): Response
+    {
+        $attachment->update($request->all());
+
+        return response($attachment, Response::HTTP_CREATED);
+    }
+
+    /**
+     * Remove the attachment from storage.
+     */
+    public function destroy(Attachment $attachment): Response
+    {
+        $attachment->delete();
+
+        return response([], Response::HTTP_NO_CONTENT);
     }
 }
