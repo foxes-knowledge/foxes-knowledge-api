@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
 
 class Attachment extends Model
@@ -14,7 +14,7 @@ class Attachment extends Model
         'file',
     ];
 
-    public function post(): Relation
+    public function post(): BelongsTo
     {
         return $this->belongsTo(Post::class);
     }

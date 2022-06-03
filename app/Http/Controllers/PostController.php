@@ -25,6 +25,13 @@ class PostController extends Controller
     {
         $post = Post::create($request->all());
 
+        if ($post_id = $request->get('post_id')) {
+            $post->parent()->save(new Post(['id' => $post_id]));
+        }
+
+        $post->tags()->attach($request->get('tag_id'));
+        $post->save();
+
         return response($post, Response::HTTP_CREATED);
     }
 

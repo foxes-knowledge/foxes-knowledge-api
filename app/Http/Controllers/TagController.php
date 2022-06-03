@@ -25,6 +25,11 @@ class TagController extends Controller
     {
         $tag = Tag::create($request->all());
 
+        if ($tag_id = $request->get('post_id')) {
+            $tag->parent()->save(new Tag(['id' => $tag_id]));
+        }
+        $tag->save();
+
         return response($tag, Response::HTTP_CREATED);
     }
 
