@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AttachmentStoreRequest;
+use App\Http\Requests\AttachmentUpdateRequest;
 use App\Models\Attachment;
 use Illuminate\Http\Response;
-use Illuminate\Http\Request;
 
 class AttachmentController extends Controller
 {
@@ -21,7 +22,7 @@ class AttachmentController extends Controller
     /**
      * Store a newly created attachment in storage.
      */
-    public function store(Request $request): Response
+    public function store(AttachmentStoreRequest $request): Response
     {
         $attachment = Attachment::create($request->all());
 
@@ -39,7 +40,7 @@ class AttachmentController extends Controller
     /**
      * Update the attachment in storage.
      */
-    public function update(Request $request, Attachment $attachment): Response
+    public function update(AttachmentUpdateRequest $request, Attachment $attachment): Response
     {
         $attachment->update($request->all());
 
