@@ -12,6 +12,7 @@ parameters:
 
     excludePaths:
         - ./app/Providers/*
+        - ./app/Http/Controllers/AuthController.php
 
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
