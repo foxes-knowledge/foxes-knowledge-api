@@ -28,10 +28,10 @@ class UserStoreRequest extends FormRequest
             'name' => 'nullable|max:32|string',
             'email' => 'unique:email|max:64|required|string',
             'password' => 'required|max:64',
-            'isEmailPublic' => 'required|boolean',
+            'isEmailPublic' => 'boolean',
             'picture' => 'mimes:png,jpg,jpeg|max:4096',
             'bio' => 'max:200',
-            'color' => 'required|max:7',
+            'color' => 'max:7',
         ];
     }
 }
