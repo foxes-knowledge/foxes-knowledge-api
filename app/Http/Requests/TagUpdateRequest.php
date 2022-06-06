@@ -24,9 +24,9 @@ class TagUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'tag_id' => 'exists:tags,id',
-            'name' => 'max:24|string',
-            'color' => 'max:7|string',
+            'tag_id' => 'integer|exists:tags,id',
+            'name' => 'string|max:24',
+            'color' => 'string|max:7',
         ];
     }
 }

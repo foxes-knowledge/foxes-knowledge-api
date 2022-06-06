@@ -24,10 +24,10 @@ class PostStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|max:64|string',
+            'title' => 'required|string|max:64',
             'body' => 'required|string|max:65500',
-            'user_id' => 'required|exists:users,id',
-            'post_id' => 'exists:posts,id',
+            'user_id' => 'required|integer|exists:users,id',
+            'post_id' => 'integer|exists:posts,id',
             'upvotes' => 'integer',
             'downvotes' => 'integer'
         ];

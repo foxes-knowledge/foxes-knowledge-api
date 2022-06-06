@@ -24,9 +24,9 @@ class TagStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'tag_id' => 'exists:tags,id',
-            'name' => 'required|max:24|string',
-            'color' => 'required|max:7|string',
+            'tag_id' => 'integer|exists:tags,id',
+            'name' => 'required|string|max:24',
+            'color' => 'required|string|max:7',
         ];
     }
 }

@@ -24,10 +24,10 @@ class PostUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'max:64|string',
+            'title' => 'string|max:64',
             'body' => 'string|max:65500',
-            'user_id' => 'exists:users,id',
-            'post_id' => 'exists:posts,id',
+            'user_id' => 'integer|exists:users,id',
+            'post_id' => 'integer|exists:posts,id',
             'upvotes' => 'integer',
             'downvotes' => 'integer'
         ];

@@ -24,8 +24,8 @@ class CommentUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => 'exists:users,id',
-            'post_id' => 'exists:posts,id',
+            'user_id' => 'integer|exists:users,id',
+            'post_id' => 'integer|exists:posts,id',
             'content' => 'string|max:65500',
         ];
     }

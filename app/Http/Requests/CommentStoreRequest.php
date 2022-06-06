@@ -24,8 +24,8 @@ class CommentStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => 'required|exists:users,id',
-            'post_id' => 'required|exists:posts,id',
+            'user_id' => 'required|integer|exists:users,id',
+            'post_id' => 'required|integer|exists:posts,id',
             'content' => 'required|string|max:65500',
         ];
     }

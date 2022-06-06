@@ -24,7 +24,7 @@ class AttachmentStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'post_id' => 'required|exists:posts,id',
+            'post_id' => 'required|integer|exists:posts,id',
             'file' => 'required|file|max:4096',
         ];
     }

@@ -24,14 +24,14 @@ class UserUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'username' => 'max:16|string',
-            'name' => 'nullable|max:32|string',
-            'email' => 'unique:email|max:64|string',
-            'password' => 'max:64',
+            'username' => 'string|max:16',
+            'name' => 'string|max:32',
+            'email' => 'string|max:64|unique:email',
+            'password' => 'string|max:64',
             'isEmailPublic' => 'boolean',
-            'picture' => 'mimes:png,jpg,jpeg|max:4096',
-            'bio' => 'max:200',
-            'color' => 'max:7',
+            'picture' => 'image|mimes:png,jpg,jpeg|max:4096',
+            'bio' => 'string|max:200',
+            'color' => 'string|max:7',
         ];
     }
 }

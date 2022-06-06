@@ -24,7 +24,7 @@ class AttachmentUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'post_id' => 'exists:posts,id',
+            'post_id' => 'integer|exists:posts,id',
             'file' => 'file|max:4096',
         ];
     }
