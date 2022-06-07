@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserStoreRequest;
-use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
 use Illuminate\Http\Response;
+use App\Services\UserService;
+use App\Http\Requests\UserStoreRequest;
+use App\Http\Requests\UserUpdateRequest;
 
 class UserController extends Controller
 {
@@ -22,9 +23,9 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(UserStoreRequest $request): Response
+    public function store(UserStoreRequest $request, UserService $userService): Response
     {
-        $user = User::create($request->all());
+        $user = $userService->create((array)$request->validated());
 
         return response($user, Response::HTTP_CREATED);
     }
@@ -40,9 +41,9 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UserUpdateRequest $request, User $user): Response
+    public function update(UserUpdateRequest $request, User $user, UserService $userService): Response
     {
-        $user->update($request->all());
+        $user = $userService->update((array)$request->validated(), $user);
 
         return response($user, Response::HTTP_CREATED);
     }

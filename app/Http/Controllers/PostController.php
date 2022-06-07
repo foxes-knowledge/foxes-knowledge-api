@@ -14,7 +14,7 @@ class PostController extends Controller
      */
     public function index(): Response
     {
-        $posts = Post::with(['user', 'tags', 'parent'])->get();
+        $posts = Post::with(['user', 'tags'])->get();
 
         return response($posts);
     }
@@ -25,10 +25,6 @@ class PostController extends Controller
     public function store(PostStoreRequest $request): Response
     {
         $post = Post::create($request->all());
-
-        if ($post_id = $request->get('post_id')) {
-            $post->parent()->save(new Post(['id' => $post_id]));
-        }
 
         $post->tags()->attach($request->get('tag_id'));
         $post->save();
@@ -41,7 +37,7 @@ class PostController extends Controller
      */
     public function show(Post $post): Response
     {
-        return response(Post::with(['user', 'tags', 'parent'])->find($post->id));
+        return response(Post::with(['user', 'tags', 'parent', 'child'])->find($post->id));
     }
 
     /**

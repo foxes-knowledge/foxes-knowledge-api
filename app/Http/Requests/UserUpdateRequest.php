@@ -26,7 +26,7 @@ class UserUpdateRequest extends FormRequest
         return [
             'username' => 'string|max:16',
             'name' => 'string|max:32',
-            'email' => 'string|max:64|unique:email',
+            'email' => 'string|max:64|unique:users,email',
             'password' => 'string|max:64',
             'isEmailPublic' => 'boolean',
             'picture' => 'image|mimes:png,jpg,jpeg|max:4096',
