@@ -25,11 +25,13 @@ class PostUpdateRequest extends FormRequest
     {
         return [
             'title' => 'string|max:64',
-            'body' => 'string|max:65500',
+            'content' => 'string|max:65500',
             'user_id' => 'integer|exists:users,id',
             'post_id' => 'integer|exists:posts,id',
+            'tag_ids' => 'array',
             'upvotes' => 'integer',
-            'downvotes' => 'integer'
+            'downvotes' => 'integer',
+            'attachments.*' => 'max:8096'
         ];
     }
 }

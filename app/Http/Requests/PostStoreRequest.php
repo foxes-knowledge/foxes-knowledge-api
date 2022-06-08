@@ -25,11 +25,13 @@ class PostStoreRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:64',
-            'body' => 'required|string|max:65500',
+            'content' => 'required|string|max:65500',
             'user_id' => 'required|integer|exists:users,id',
             'post_id' => 'integer|exists:posts,id',
+            'tag_ids' => 'required|array',
             'upvotes' => 'integer',
-            'downvotes' => 'integer'
+            'downvotes' => 'integer',
+            'attachments.*' => 'max:8096'
         ];
     }
 }

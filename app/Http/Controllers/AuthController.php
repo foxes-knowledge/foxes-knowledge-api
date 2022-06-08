@@ -5,26 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\SignUpRequest;
 use App\Http\Requests\SignInRequest;
+use App\Services\UserService;
 
 class AuthController extends Controller
 {
     /**
      * Register a user and issue a token.
      */
-    public function signUp(SignUpRequest $request): Response
+    public function signUp(SignUpRequest $request, UserService $userService): Response
     {
-        $color = dechex(rand(0x000000, 0xFFFFFF));
-
-        $user = User::create([
-            'username' => $request->input('username'),
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
-            'color' => "#$color"
-        ]);
+        $user = $userService->create($request->validated());
 
         $token = $user->createToken('auth_token');
 
@@ -69,7 +61,12 @@ class AuthController extends Controller
      */
     public function signOut(): Response
     {
-        Auth::user()->currentAccessToken()->delete();
+        /**
+         * @var $token
+         * @method delete() Delete token.
+         */
+        $token = Auth::user()->currentAccessToken();
+        $token->delete();
 
         return response([], Response::HTTP_NO_CONTENT);
     }

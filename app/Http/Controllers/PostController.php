@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
+use App\Services\PostService;
+use Illuminate\Http\Response;
 use App\Http\Requests\PostStoreRequest;
 use App\Http\Requests\PostUpdateRequest;
-use App\Models\Post;
-use Illuminate\Http\Response;
 
 class PostController extends Controller
 {
@@ -14,7 +15,7 @@ class PostController extends Controller
      */
     public function index(): Response
     {
-        $posts = Post::with(['user', 'tags', 'parent'])->get();
+        $posts = Post::with(['user', 'tags'])->get();
 
         return response($posts);
     }
@@ -22,16 +23,9 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(PostStoreRequest $request): Response
+    public function store(PostStoreRequest $request, PostService $postService): Response
     {
-        $post = Post::create($request->all());
-
-        if ($post_id = $request->get('post_id')) {
-            $post->parent()->save(new Post(['id' => $post_id]));
-        }
-
-        $post->tags()->attach($request->get('tag_id'));
-        $post->save();
+        $post = $postService->create((array)$request->validated());
 
         return response($post, Response::HTTP_CREATED);
     }
@@ -41,15 +35,15 @@ class PostController extends Controller
      */
     public function show(Post $post): Response
     {
-        return response(Post::with(['user', 'tags', 'parent'])->find($post->id));
+        return response(Post::with(['user', 'tags', 'attachments', 'parent', 'child'])->find($post->id));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(PostUpdateRequest $request, Post $post): Response
+    public function update(PostUpdateRequest $request, Post $post, PostService $postService): Response
     {
-        $post->update($request->all());
+        $post = $postService->update((array)$request->validated(), $post);
 
         return response($post, Response::HTTP_CREATED);
     }
