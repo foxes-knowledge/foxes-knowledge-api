@@ -37,6 +37,11 @@ class Post extends Model
         return $this->hasMany(Comment::class);
     }
 
+    public function attachments(): HasMany
+    {
+        return $this->hasMany(Attachment::class);
+    }
+
     public function parent(): BelongsTo
     {
         return $this->belongsTo(self::class, 'post_id');

@@ -33,8 +33,7 @@ COPY docker/etc /etc
 ARG S6_OVERLAY_VERSION=v3.1.0.1
 RUN S6_OVERLAY_RELEASE=https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION} \
     && curl -sSL $S6_OVERLAY_RELEASE/s6-overlay-noarch.tar.xz | tar Jxpf - -C / \
-    && curl -sSL $S6_OVERLAY_RELEASE/s6-overlay-x86_64.tar.xz | tar Jxpf - -C / \
-    && chmod -R +x /etc/services.d
+    && curl -sSL $S6_OVERLAY_RELEASE/s6-overlay-x86_64.tar.xz | tar Jxpf - -C /
 ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME=60000
 
 COPY docker/local /usr/local
@@ -51,7 +50,7 @@ RUN apk add --no-cache -t .development-deps \
 
 RUN set -xe \
     && apk add --no-cache -t .build-deps $PHPIZE_DEPS \
-    && pecl install -f xdebug-3.1.4 \
+    && pecl install -f xdebug-3.1.5 \
     && docker-php-ext-enable xdebug \
     && pecl clear-cache \
     && apk del --purge .build-deps

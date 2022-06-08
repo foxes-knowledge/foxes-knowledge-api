@@ -47,9 +47,10 @@ class UserService
             }
         }
 
-        $file = pathinfo($picture->getClientOriginalName());
-        $filename = $user->id . str($file['filename'])->slug(); // @phpstan-ignore-line
-        $picturePath = $picture->storeAs('avatars', "$filename." . $file['extension']); // @phpstan-ignore-line
+        $original = $picture->getClientOriginalName();
+        $filename = $user->id . str(pathinfo($original, PATHINFO_FILENAME))->slug(); // @phpstan-ignore-line
+        $extension = pathinfo($original, PATHINFO_EXTENSION);
+        $picturePath = $picture->storeAs('avatars', "$filename.$extension");
 
         $user->update([
             'picture' => Storage::url((string)$picturePath)

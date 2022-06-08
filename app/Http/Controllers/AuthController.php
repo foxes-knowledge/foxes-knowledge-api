@@ -61,7 +61,12 @@ class AuthController extends Controller
      */
     public function signOut(): Response
     {
-        Auth::user()->currentAccessToken()->delete();
+        /**
+         * @var $token
+         * @method delete() Delete token.
+         */
+        $token = Auth::user()->currentAccessToken();
+        $token->delete();
 
         return response([], Response::HTTP_NO_CONTENT);
     }
