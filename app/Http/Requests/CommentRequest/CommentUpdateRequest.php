@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\CommentRequest;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AttachmentStoreRequest extends FormRequest
+class CommentUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class AttachmentStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -24,8 +24,9 @@ class AttachmentStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'post_id' => 'required|integer|exists:posts,id',
-            'file' => 'required|file|max:4096',
+            'user_id' => 'integer|exists:users,id',
+            'post_id' => 'integer|exists:posts,id',
+            'content' => 'string|max:65500',
         ];
     }
 }

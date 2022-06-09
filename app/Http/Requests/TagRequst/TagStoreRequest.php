@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\TagRequest;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AttachmentUpdateRequest extends FormRequest
+class TagStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,9 @@ class AttachmentUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'post_id' => 'integer|exists:posts,id',
-            'file' => 'file|max:4096',
+            'tag_id' => 'integer|exists:tags,id',
+            'name' => 'required|string|max:24',
+            'color' => 'required|string|max:7',
         ];
     }
 }

@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\ReactionRequest;
 
+use App\Constants\ReactionType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
-class TagUpdateRequest extends FormRequest
+class ReactionCommentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +26,7 @@ class TagUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'tag_id' => 'integer|exists:tags,id',
-            'name' => 'string|max:24',
-            'color' => 'string|max:7',
+            'type' => new Enum(ReactionType::class)
         ];
     }
 }

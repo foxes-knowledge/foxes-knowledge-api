@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\AttachmentRequest;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PostStoreRequest extends FormRequest
+class AttachmentUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,14 +24,8 @@ class PostStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|string|max:64',
-            'content' => 'required|string|max:65500',
-            'user_id' => 'required|integer|exists:users,id',
             'post_id' => 'integer|exists:posts,id',
-            'tag_ids' => 'required|array',
-            'upvotes' => 'integer',
-            'downvotes' => 'integer',
-            'attachments.*' => 'max:8096'
+            'file' => 'file|max:4096',
         ];
     }
 }

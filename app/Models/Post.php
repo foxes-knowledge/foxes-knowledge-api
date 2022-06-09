@@ -18,8 +18,6 @@ class Post extends Model
         'content',
         'user_id',
         'post_id',
-        'upvotes',
-        'downvotes'
     ];
 
     public function user(): BelongsTo
@@ -50,5 +48,10 @@ class Post extends Model
     public function child(): HasOne
     {
         return $this->hasOne(self::class, 'post_id');
+    }
+
+    public function reactions(): HasMany
+    {
+        return $this->hasMany(Reaction::class);
     }
 }

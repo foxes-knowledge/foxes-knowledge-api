@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\TagStoreRequest;
-use App\Http\Requests\TagUpdateRequest;
+use App\Http\Requests\TagRequest\TagStoreRequest;
+use App\Http\Requests\TagRequest\TagUpdateRequest;
 use App\Models\Tag;
 use Illuminate\Http\Response;
 

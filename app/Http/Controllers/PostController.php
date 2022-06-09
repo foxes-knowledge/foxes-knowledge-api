@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostRequest\PostStoreRequest;
+use App\Http\Requests\PostRequest\PostUpdateRequest;
 use App\Models\Post;
 use App\Services\PostService;
 use Illuminate\Http\Response;
-use App\Http\Requests\PostStoreRequest;
-use App\Http\Requests\PostUpdateRequest;
 
 class PostController extends Controller
 {
@@ -15,9 +15,20 @@ class PostController extends Controller
      */
     public function index(): Response
     {
-        $posts = Post::with(['user', 'tags'])->get();
-
-        return response($posts);
+        return response(Post::withCount([
+            'reactions as upvotes' => function ($query) {
+                $query->where('type', 'upvote');
+            },
+            'reactions as downvotes' => function ($query) {
+                $query->where('type', 'downvote');
+            },
+        ])
+            ->with(['user', 'tags', 'attachments', 'parent', 'child'])
+            ->get());
+//
+//        $posts = Post::with(['user', 'tags'])->get();
+//
+//        return response($posts);
     }
 
     /**
@@ -35,7 +46,16 @@ class PostController extends Controller
      */
     public function show(Post $post): Response
     {
-        return response(Post::with(['user', 'tags', 'attachments', 'parent', 'child'])->find($post->id));
+        return response(Post::withCount([
+            'reactions as upvotes' => function ($query) {
+                $query->where('type', 'upvote');
+            },
+            'reactions as downvotes' => function ($query) {
+                $query->where('type', 'downvote');
+            },
+        ])
+            ->with(['user', 'tags', 'attachments', 'parent', 'child'])
+            ->find($post->id));
     }
 
     /**

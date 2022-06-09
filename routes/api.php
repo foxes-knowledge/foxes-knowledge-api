@@ -4,6 +4,7 @@ use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ReactionController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -22,4 +23,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('posts', PostController::class);
     Route::apiResource('comments', CommentController::class);
     Route::apiResource('attachments', AttachmentController::class);
+
+    Route::group(['prefix' => 'reaction'], function () {
+        Route::post('/post/{post}', [ReactionController::class, 'storePost']);
+        Route::post('/comment/{comment}', [ReactionController::class, 'storeComment']);
+    });
 });
