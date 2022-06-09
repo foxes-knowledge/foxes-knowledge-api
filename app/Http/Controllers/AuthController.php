@@ -48,6 +48,7 @@ class AuthController extends Controller
 
         return response([
             'message' => 'Signed in successfully.',
+            'user' => $user->toArray(),
             'token' => [
                 'type' => 'Bearer',
                 'value' => $token->plainTextToken,
