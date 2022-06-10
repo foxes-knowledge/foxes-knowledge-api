@@ -2,69 +2,69 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ReactionRequest\ReactionCommentRequest;
-use App\Http\Requests\ReactionRequest\ReactionPostRequest;
-use App\Models\Comment;
 use App\Models\Post;
+use App\Models\Comment;
 use App\Models\Reaction;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\ReactionRequest\ReactionPostRequest;
+use App\Http\Requests\ReactionRequest\ReactionCommentRequest;
 
 class ReactionController extends Controller
 {
-    public function storePost(Post $post, ReactionPostRequest $request): Response
+    public function reactPost(Post $post, ReactionPostRequest $request): Response
     {
+        $userId = Auth::id();
+        $type = $request->type;
+
         $reaction = Reaction::where([
-            ['user_id', Auth::id()],
+            ['user_id', $userId],
             ['post_id', $post->id]
         ])->first();
-        $data = $request->all();
 
-        if ($reaction !== null) {
-            if ($reaction->type === $data['type']) {
-                Reaction::destroy($reaction->id);
-            } else {
-                $reaction->type = $data['type'];
-                $reaction->save();
-            }
-        } else {
-            Reaction::create([
-                'user_id' => Auth::id(),
+        if (!$reaction) {
+            return response(Reaction::create([
+                'user_id' => $userId,
                 'post_id' => $post->id,
-                'type' => $data['type']
-            ]);
+                'type' => $type
+            ]), Response::HTTP_CREATED);
         }
 
-        return response([
-            'created' => true
-        ]);
+        if ($reaction->type->value === $type) {
+            Reaction::destroy($reaction->id);
+            return response(null, Response::HTTP_NO_CONTENT);
+        }
+
+        $reaction->update(['type' => $type]);
+
+        return response($reaction, Response::HTTP_CREATED);
     }
 
-    public function storeComment(Comment $comment, ReactionCommentRequest $request): Response
+    public function reactComment(Comment $comment, ReactionCommentRequest $request): Response
     {
+        $userId = Auth::id();
+        $type = $request->type;
+
         $reaction = Reaction::where([
-            ['user_id', Auth::id()],
+            ['user_id', $userId],
             ['comment_id', $comment->id]
         ])->first();
-        $data = $request->all();
 
-        if ($reaction !== null) {
-            if ($reaction->type === $data['type']) {
-                Reaction::destroy($reaction->id);
-            } else {
-                $reaction->type = $data['type'];
-                $reaction->save();
-            }
-        } else {
-            Reaction::create([
-                'user_id' => Auth::id(),
+        if (!$reaction) {
+            return response(Reaction::create([
+                'user_id' => $userId,
                 'comment_id' => $comment->id,
-                'type' => $data['type']
-            ]);
+                'type' => $type
+            ]), Response::HTTP_CREATED);
         }
 
-        return response([
-            'created' => true
-        ]);
+        if ($reaction->type->value === $type) {
+            Reaction::destroy($reaction->id);
+            return response(null, Response::HTTP_NO_CONTENT);
+        }
+
+        $reaction->update(['type' => $type]);
+
+        return response($reaction, Response::HTTP_CREATED);
     }
 }

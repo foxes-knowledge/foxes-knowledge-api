@@ -2,28 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
+use App\Services\CommentService;
+use Illuminate\Http\Response;
 use App\Http\Requests\CommentRequest\CommentStoreRequest;
 use App\Http\Requests\CommentRequest\CommentUpdateRequest;
-use App\Models\Comment;
-use Illuminate\Http\Response;
 
 class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(CommentService $commentService): Response
     {
-        return response(Comment::withCount([
-            'reactions as upvotes' => function ($query) {
-                $query->where('type', 'upvote');
-            },
-            'reactions as downvotes' => function ($query) {
-                $query->where('type', 'downvote');
-            },
-        ])
-            ->with(['user', 'post'])
-            ->get());
+        return response($commentService->getBaseQuery()->get());
     }
 
     /**
@@ -39,18 +31,9 @@ class CommentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Comment $comment): Response
+    public function show(Comment $comment, CommentService $commentService): Response
     {
-        return response(Comment::withCount([
-            'reactions as upvotes' => function ($query) {
-                $query->where('type', 'upvote');
-            },
-            'reactions as downvotes' => function ($query) {
-                $query->where('type', 'downvote');
-            },
-        ])
-            ->with(['user', 'post'])
-            ->find($comment->id));
+        return response($commentService->getBaseQuery()->find($comment->id));
     }
 
     /**

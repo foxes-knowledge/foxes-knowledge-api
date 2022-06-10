@@ -13,22 +13,9 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(PostService $postService): Response
     {
-        return response(Post::withCount([
-            'reactions as upvotes' => function ($query) {
-                $query->where('type', 'upvote');
-            },
-            'reactions as downvotes' => function ($query) {
-                $query->where('type', 'downvote');
-            },
-        ])
-            ->with(['user', 'tags', 'attachments', 'parent', 'child'])
-            ->get());
-//
-//        $posts = Post::with(['user', 'tags'])->get();
-//
-//        return response($posts);
+        return response($postService->getBaseQuery()->get());
     }
 
     /**
@@ -44,18 +31,9 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Post $post): Response
+    public function show(Post $post, PostService $postService): Response
     {
-        return response(Post::withCount([
-            'reactions as upvotes' => function ($query) {
-                $query->where('type', 'upvote');
-            },
-            'reactions as downvotes' => function ($query) {
-                $query->where('type', 'downvote');
-            },
-        ])
-            ->with(['user', 'tags', 'attachments', 'parent', 'child'])
-            ->find($post->id));
+        return response($postService->getBaseQuery()->find($post->id));
     }
 
     /**

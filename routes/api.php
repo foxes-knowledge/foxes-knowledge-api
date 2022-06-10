@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(AuthController::class)->prefix('auth')->group(function () {
     Route::post('/signup', 'signUp');
-    Route::post('/signin', 'signIn')->name('signin');
+    Route::post('/signin', 'signIn');
     Route::post('/signout', 'signOut')->middleware('auth:sanctum');
     Route::post('/revoke', 'revokeTokens')->middleware('auth:sanctum');
     Route::get('/me', 'me')->middleware('auth:sanctum');
@@ -24,8 +24,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('comments', CommentController::class);
     Route::apiResource('attachments', AttachmentController::class);
 
-    Route::group(['prefix' => 'reaction'], function () {
-        Route::post('/post/{post}', [ReactionController::class, 'storePost']);
-        Route::post('/comment/{comment}', [ReactionController::class, 'storeComment']);
+    Route::controller(ReactionController::class)->group(function () {
+        Route::post('/posts/{post}/reactions', 'reactPost');
+        Route::post('/comments/{comment}/reactions', 'reactComment');
     });
 });

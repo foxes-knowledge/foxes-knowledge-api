@@ -6,6 +6,18 @@ use App\Models\Post;
 
 class PostService
 {
+    public function getBaseQuery(): \Illuminate\Database\Eloquent\Builder | Post
+    {
+        return Post::withCount([
+            'reactions as upvotes' => function ($query) {
+                $query->where('type', 'upvote');
+            },
+            'reactions as downvotes' => function ($query) {
+                $query->where('type', 'downvote');
+            },
+        ])->with(['user', 'tags', 'attachments', 'parent', 'child']);
+    }
+
     public function create(array $data): Post
     {
         $post = Post::create($data);

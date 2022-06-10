@@ -2,18 +2,13 @@
 
 namespace App\Http\Requests\ReactionRequest;
 
-use App\Constants\ReactionType;
+use App\Enums\ReactionType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
 class ReactionCommentRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
