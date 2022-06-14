@@ -16,7 +16,7 @@
                 "conditions": []
             },
             {
-                "action": "php vendor/bin/phpstan analyze",
+                "action": "php vendor/bin/phpstan analyze --memory-limit 256M",
                 "options": [],
                 "conditions": []
             }

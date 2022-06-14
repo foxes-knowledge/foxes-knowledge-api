@@ -2,21 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CommentStoreRequest;
-use App\Http\Requests\CommentUpdateRequest;
 use App\Models\Comment;
+use App\Services\CommentService;
 use Illuminate\Http\Response;
+use App\Http\Requests\CommentRequest\CommentStoreRequest;
+use App\Http\Requests\CommentRequest\CommentUpdateRequest;
 
 class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(CommentService $commentService): Response
     {
-        $comments = Comment::with(['user', 'post'])->get();
-
-        return response($comments);
+        return response($commentService->getBaseQuery());
     }
 
     /**
@@ -32,9 +31,9 @@ class CommentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Comment $comment): Response
+    public function show(Comment $comment, CommentService $commentService): Response
     {
-        return response(Comment::with(['user', 'post'])->find($comment));
+        return response($commentService->getBaseQuery($comment->id));
     }
 
     /**

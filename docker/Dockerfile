@@ -10,7 +10,7 @@ COPY . .
 
 RUN composer dump-autoload --optimize
 
-FROM php:8.1.6-fpm-alpine3.16 AS production
+FROM php:8.1.7-fpm-alpine3.16 AS production
 
 RUN apk add --no-cache -t .production-deps \
     nginx libpq

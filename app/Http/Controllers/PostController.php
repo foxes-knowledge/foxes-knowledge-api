@@ -2,22 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ReactionType;
+use App\Http\Requests\PostRequest\PostStoreRequest;
+use App\Http\Requests\PostRequest\PostUpdateRequest;
 use App\Models\Post;
 use App\Services\PostService;
 use Illuminate\Http\Response;
-use App\Http\Requests\PostStoreRequest;
-use App\Http\Requests\PostUpdateRequest;
 
 class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(PostService $postService): Response
     {
-        $posts = Post::with(['user', 'tags'])->get();
-
-        return response($posts);
+        return response($postService->getBaseQuery());
     }
 
     /**
@@ -33,9 +32,9 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Post $post): Response
+    public function show(Post $post, PostService $postService): Response
     {
-        return response(Post::with(['user', 'tags', 'attachments', 'parent', 'child'])->find($post->id));
+        return response($postService->getBaseQuery($post->id));
     }
 
     /**

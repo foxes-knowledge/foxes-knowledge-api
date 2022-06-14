@@ -4,17 +4,22 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
+use App\Enums\ReactionType;
 
-class Comment extends Model
+class Reaction extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'content',
         'user_id',
-        'post_id'
+        'post_id',
+        'comment_id',
+        'type',
+    ];
+
+    protected $casts = [
+        'type' => ReactionType::class,
     ];
 
     public function user(): BelongsTo
@@ -27,8 +32,8 @@ class Comment extends Model
         return $this->belongsTo(Post::class);
     }
 
-    public function reactions(): HasMany
+    public function comment(): BelongsTo
     {
-        return $this->hasMany(Reaction::class);
+        return $this->belongsTo(Comment::class);
     }
 }

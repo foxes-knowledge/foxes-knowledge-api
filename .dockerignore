@@ -3,7 +3,9 @@
 /.*.meta.*
 /.*.cache
 /.editorconfig
-/.gitlab-ci.yml
+.git*
 /tests/_output/*
 /tests/_support/_generated/*
 /vendor/
+/docker/Dockerfile
+/.dockerignore

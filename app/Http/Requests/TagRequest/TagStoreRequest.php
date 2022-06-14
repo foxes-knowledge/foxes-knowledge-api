@@ -1,17 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\TagRequest;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TagUpdateRequest extends FormRequest
+class TagStoreRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -25,8 +20,8 @@ class TagUpdateRequest extends FormRequest
     {
         return [
             'tag_id' => 'integer|exists:tags,id',
-            'name' => 'string|max:24',
-            'color' => 'string|max:7',
+            'name' => 'required|string|max:24',
+            'color' => 'required|string|max:7',
         ];
     }
 }

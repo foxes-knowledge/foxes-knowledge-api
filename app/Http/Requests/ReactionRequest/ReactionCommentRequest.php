@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\ReactionRequest;
 
+use App\Enums\ReactionType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
-class SignInRequest extends FormRequest
+class ReactionCommentRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -19,8 +21,7 @@ class SignInRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|string|max:256|exists:users,email',
-            'password' => 'required|string|max:256',
+            'type' => new Enum(ReactionType::class)
         ];
     }
 }

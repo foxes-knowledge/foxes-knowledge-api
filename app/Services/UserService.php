@@ -48,7 +48,7 @@ class UserService
         }
 
         $original = $picture->getClientOriginalName();
-        $filename = $user->id . str(pathinfo($original, PATHINFO_FILENAME))->slug(); // @phpstan-ignore-line
+        $filename = $user->id . str(pathinfo($original, PATHINFO_FILENAME))->slug();
         $extension = pathinfo($original, PATHINFO_EXTENSION);
         $picturePath = $picture->storeAs('avatars', "$filename.$extension");
 

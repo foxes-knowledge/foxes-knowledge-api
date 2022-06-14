@@ -1,17 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\PostRequest;
 
 use Illuminate\Foundation\Http\FormRequest;
 
 class PostUpdateRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -29,8 +24,6 @@ class PostUpdateRequest extends FormRequest
             'user_id' => 'integer|exists:users,id',
             'post_id' => 'integer|exists:posts,id',
             'tag_ids' => 'array',
-            'upvotes' => 'integer',
-            'downvotes' => 'integer',
             'attachments.*' => 'max:8096'
         ];
     }

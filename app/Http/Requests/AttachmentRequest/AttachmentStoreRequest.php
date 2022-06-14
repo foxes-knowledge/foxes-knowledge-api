@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\AttachmentRequest;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SignUpRequest extends FormRequest
+class AttachmentStoreRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -19,10 +19,8 @@ class SignUpRequest extends FormRequest
     public function rules()
     {
         return [
-            'username' => 'required|string|max:16',
-            'name' => 'string|max:32',
-            'email' => 'required|string|max:256|unique:users,email',
-            'password' => 'required|string|max:256|confirmed',
+            'post_id' => 'required|integer|exists:posts,id',
+            'file' => 'required|file|max:4096',
         ];
     }
 }

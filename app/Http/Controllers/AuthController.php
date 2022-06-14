@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AuthRequest\SignInRequest;
+use App\Http\Requests\AuthRequest\SignUpRequest;
 use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\SignUpRequest;
-use App\Http\Requests\SignInRequest;
+
 use App\Services\UserService;
 
 class AuthController extends Controller

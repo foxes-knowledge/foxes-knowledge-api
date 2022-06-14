@@ -2,10 +2,60 @@
 
 namespace App\Services;
 
+use App\Enums\ReactionType;
 use App\Models\Post;
 
 class PostService
 {
+    private function getCounts(): array
+    {
+        $counts = [];
+        foreach (ReactionType::cases() as $type) {
+            $counts["reactions as {$type->value}"] = fn ($query) => $query->where('type', $type->value);
+        }
+
+        return $counts;
+    }
+
+    /**
+     * @return Post|Post[] $posts
+     */
+    public function getBaseQuery(int $postId = null)
+    {
+        $counts = [];
+        foreach (ReactionType::cases() as $type) {
+            $counts["reactions as {$type->value}"] = fn ($query) => $query->where('type', $type->value);
+        }
+
+        if (!!$postId) {
+            return $this->withReactions(Post::find($postId));
+        }
+
+        /**
+         * @var Post[] $posts
+         */
+        $posts = [];
+        foreach (Post::all() as $post) {
+            $posts[] = $this->withReactions($post);
+        }
+
+        return $posts;
+    }
+
+    public function withReactions(Post $post): Post
+    {
+        $copy = Post::find($post->id);
+        $copy->loadCount($this->getCounts());
+
+        $post->reactions = array_filter(
+            $copy->toArray(),
+            fn ($value, $key) => in_array($key, ReactionType::values()),
+            ARRAY_FILTER_USE_BOTH
+        );
+
+        return $post->load(['user', 'tags', 'attachments', 'parent', 'child']);
+    }
+
     public function create(array $data): Post
     {
         $post = Post::create($data);
@@ -48,7 +98,7 @@ class PostService
         foreach ($attachments as $file) {
             $original = $file->getClientOriginalName();
             $filename = pathinfo($original, PATHINFO_FILENAME);
-            $filename = $post->id . str($filename)->slug().'-'.time(); // @phpstan-ignore-line
+            $filename = $post->id . str($filename)->slug() . '-' . time();
             $extension = pathinfo($original, PATHINFO_EXTENSION);
             $picturePath = $file->storeAs('attachments', "$filename.$extension");
 

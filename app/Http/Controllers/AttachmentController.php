@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AttachmentStoreRequest;
-use App\Http\Requests\AttachmentUpdateRequest;
+use App\Http\Requests\AttachmentRequest\AttachmentStoreRequest;
+use App\Http\Requests\AttachmentRequest\AttachmentUpdateRequest;
 use App\Models\Attachment;
 use Illuminate\Http\Response;
 
