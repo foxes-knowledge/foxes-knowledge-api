@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ReactionType;
 use App\Http\Requests\PostRequest\PostStoreRequest;
 use App\Http\Requests\PostRequest\PostUpdateRequest;
 use App\Models\Post;
@@ -15,7 +16,7 @@ class PostController extends Controller
      */
     public function index(PostService $postService): Response
     {
-        return response($postService->getBaseQuery()->get());
+        return response($postService->getBaseQuery());
     }
 
     /**
@@ -33,7 +34,7 @@ class PostController extends Controller
      */
     public function show(Post $post, PostService $postService): Response
     {
-        return response($postService->getBaseQuery()->find($post->id));
+        return response($postService->getBaseQuery($post->id));
     }
 
     /**

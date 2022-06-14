@@ -15,7 +15,7 @@ class CommentController extends Controller
      */
     public function index(CommentService $commentService): Response
     {
-        return response($commentService->getBaseQuery()->get());
+        return response($commentService->getBaseQuery());
     }
 
     /**
@@ -33,7 +33,7 @@ class CommentController extends Controller
      */
     public function show(Comment $comment, CommentService $commentService): Response
     {
-        return response($commentService->getBaseQuery()->find($comment->id));
+        return response($commentService->getBaseQuery($comment->id));
     }
 
     /**
