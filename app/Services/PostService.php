@@ -7,39 +7,53 @@ use App\Models\Post;
 
 class PostService
 {
-    public function getBaseQuery(int $postId = null): array
+    private function getCounts(): array
     {
-        $posts = Post::query();
-
-        if (isset($postId)) {
-            $posts = $posts->where('id', $postId);
-        }
-        $posts = $posts->with(['user', 'tags', 'attachments', 'parent', 'child'])
-            ->get()
-            ->toArray();
-
-        $reactionsCount = Post::query();
+        $counts = [];
         foreach (ReactionType::cases() as $type) {
-            $reactionsCount = $reactionsCount->withCount([
-                "reactions as {$type->value}" => function ($query) use ($type) {
-                    $query->where('type', $type->value);
-                },
-            ]);
+            $counts["reactions as {$type->value}"] = fn ($query) => $query->where('type', $type->value);
         }
 
-        $postReaction = $reactionsCount->get();
+        return $counts;
+    }
 
-        foreach ($posts as $key => $post) {
-            foreach ($postReaction as $reaction) {
-                if ($post['id'] === $reaction['id']) { // @phpstan-ignore-line
-                    $posts[$key]['reactions'] = array_filter( // @phpstan-ignore-line
-                        $reaction->toArray(), function ($value, $key) {
-                        return in_array($key, ReactionType::values());
-                    }, ARRAY_FILTER_USE_BOTH);
-                }
-            }
+    /**
+     * @return Post|Post[] $posts
+     */
+    public function getBaseQuery(int $postId = null)
+    {
+        $counts = [];
+        foreach (ReactionType::cases() as $type) {
+            $counts["reactions as {$type->value}"] = fn ($query) => $query->where('type', $type->value);
         }
+
+        if (!!$postId) {
+            return $this->withReactions(Post::find($postId));
+        }
+
+        /**
+         * @var Post[] $posts
+         */
+        $posts = [];
+        foreach (Post::all() as $post) {
+            $posts[] = $this->withReactions($post);
+        }
+
         return $posts;
+    }
+
+    public function withReactions(Post $post): Post
+    {
+        $copy = Post::find($post->id);
+        $copy->loadCount($this->getCounts());
+
+        $post->reactions = array_filter(
+            $copy->toArray(),
+            fn ($value, $key) => in_array($key, ReactionType::values()),
+            ARRAY_FILTER_USE_BOTH
+        );
+
+        return $post->load(['user', 'tags', 'attachments', 'parent', 'child']);
     }
 
     public function create(array $data): Post
@@ -84,7 +98,7 @@ class PostService
         foreach ($attachments as $file) {
             $original = $file->getClientOriginalName();
             $filename = pathinfo($original, PATHINFO_FILENAME);
-            $filename = $post->id . str($filename)->slug() . '-' . time(); // @phpstan-ignore-line
+            $filename = $post->id . str($filename)->slug() . '-' . time();
             $extension = pathinfo($original, PATHINFO_EXTENSION);
             $picturePath = $file->storeAs('attachments', "$filename.$extension");
 

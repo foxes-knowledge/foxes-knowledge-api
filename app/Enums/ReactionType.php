@@ -9,10 +9,8 @@ enum ReactionType: string
 
     public static function values(): array
     {
-        $values = array();
-        foreach (self::cases() as $case) {
-            $values[] = $case->value;
-        }
-        return $values;
+        return array_map(function ($case) {
+            return $case->value;
+        }, self::cases());
     }
 }

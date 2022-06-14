@@ -7,38 +7,47 @@ use App\Models\Comment;
 
 class CommentService
 {
-    public function getBaseQuery(int $commentId = null): array
+    private function getCounts(): array
     {
-        $comments = Comment::query();
-
-        if (isset($commentId)) {
-            $comments = $comments->where('id', $commentId);
-        }
-        $comments = $comments->with(['user', 'post'])
-            ->get()
-            ->toArray();
-
-        $reactionsCount = Comment::query();
+        $counts = [];
         foreach (ReactionType::cases() as $type) {
-            $reactionsCount = $reactionsCount->withCount([
-                "reactions as {$type->value}" => function ($query) use ($type) {
-                    $query->where('type', $type->value);
-                },
-            ]);
+            $counts["reactions as {$type->value}"] = fn ($query) => $query->where('type', $type->value);
         }
 
-        $commentReaction = $reactionsCount->get();
+        return $counts;
+    }
 
-        foreach ($comments as $key => $comment) {
-            foreach ($commentReaction as $reaction) {
-                if ($comment['id'] === $reaction['id']) { // @phpstan-ignore-line
-                    $comments[$key]['reactions'] = array_filter( // @phpstan-ignore-line
-                        $reaction->toArray(), function ($value, $key) {
-                            return in_array($key, ReactionType::values());
-                        }, ARRAY_FILTER_USE_BOTH);
-                }
-            }
+    /**
+     * @return Comment|Comment[] $comments
+     */
+    public function getBaseQuery(int $commentId = null)
+    {
+        if (!!$commentId) {
+            return $this->withReactions(Comment::find($commentId));
         }
+
+        /**
+         * @var Comment[] $comments
+         */
+        $comments = [];
+        foreach (Comment::all() as $comment) {
+            $comments[] = $this->withReactions($comment);
+        }
+
         return $comments;
+    }
+
+    public function withReactions(Comment $comment): Comment
+    {
+        $copy = Comment::find($comment->id);
+        $copy->loadCount($this->getCounts());
+
+        $comment->reactions = array_filter(
+            $copy->toArray(),
+            fn ($value, $key) => in_array($key, ReactionType::values()),
+            ARRAY_FILTER_USE_BOTH
+        );
+
+        return $comment->load(['user', 'post']);
     }
 }
