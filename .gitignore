@@ -19,3 +19,7 @@
 !/.env*example
 ###< laravel/laravel ###
 
+# Tests
+/.env*testing
+/tests/CodeCoverage
+
