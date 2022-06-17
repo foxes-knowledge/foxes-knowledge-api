@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Facade;
-
 return [
     'name' => env('APP_NAME', 'Laravel'),
     'env' => env('APP_ENV', 'production'),
@@ -18,7 +16,6 @@ return [
         'driver' => 'file',
     ],
     'providers' => [
-
         Illuminate\Auth\AuthServiceProvider::class,
         Illuminate\Broadcasting\BroadcastServiceProvider::class,
         Illuminate\Bus\BusServiceProvider::class,
@@ -45,7 +42,6 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
     ],
-    'aliases' => Facade::defaultAliases()->merge([])->toArray(),
+    'aliases' => \Illuminate\Support\Facades\Facade::defaultAliases()->merge([])->toArray(),
 ];

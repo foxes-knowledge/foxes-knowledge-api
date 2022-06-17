@@ -35,7 +35,7 @@ services:
             POSTGRES_USER: $DB_USERNAME
             POSTGRES_PASSWORD: $DB_PASSWORD
         healthcheck:
-            test: [CMD-SHELL, pg_isready, -U, $DB_USERNAME, -d, $DB_DATABASE]
+            test: [ CMD-SHELL, pg_isready, -U, $DB_USERNAME, -d, $DB_DATABASE ]
             interval: 30s
             timeout: 60s
             retries: 5
@@ -61,7 +61,7 @@ services:
         volumes:
             - minio-storage:/data:rw
         healthcheck:
-            test: [CMD, curl, -f, http://localhost:9000/minio/health/live]
+            test: [ CMD, curl, -f, http://localhost:9000/minio/health/live ]
             interval: 30s
             timeout: 20s
             retries: 3

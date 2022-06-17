@@ -14,8 +14,9 @@
 /public/hot
 /public/storage
 /storage/*.key
-/.env
-/.env.backup
+/.env*
 !/.env*example
 ###< laravel/laravel ###
 
+# Tests
+/tests/CodeCoverage
