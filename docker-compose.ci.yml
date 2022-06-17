@@ -1,0 +1,3 @@
+services:
+    knowledge-api:
+        image: $APP_IMAGE

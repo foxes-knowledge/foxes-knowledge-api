@@ -39,10 +39,7 @@
     },
     "scripts": {
         "test": [
-            "php artisan db:wipe --env=testing",
-            "php artisan migrate:refresh --env=testing",
-            "php artisan db:seed --env=testing",
-            "php vendor/bin/phpunit tests/Feature vendor/bin/phpunit tests/"
+            "@php artisan test --testsuite=Feature --coverage --stop-on-failure"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",

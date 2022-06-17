@@ -15,7 +15,7 @@ return new class () extends Migration {
     {
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Tag::class)->nullable()->constrained()->onDelete('cascade');
+            $table->foreignIdFor(Tag::class)->nullable()->constrained();
             $table->string('name', 24);
             $table->string('color', 7);
             $table->timestamps();

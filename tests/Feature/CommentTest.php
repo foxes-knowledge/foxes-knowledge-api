@@ -28,14 +28,14 @@ class CommentTest extends TestCase
     {
         $response = $this->getJson('/api/comments');
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     public function testCommentsShowFailNotFound(): void
     {
         $response = $this->getJson('/api/comment');
         $response
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 
     public function testCommentStoreSuccess(): void
@@ -67,7 +67,7 @@ class CommentTest extends TestCase
             'content' => $this->faker->realText(),
         ]);
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     public function testCommentStoreFailUnprocessable(): void
@@ -85,7 +85,7 @@ class CommentTest extends TestCase
             'content' => '',
         ]);
         $response
-            ->assertStatus(422);
+            ->assertUnprocessable();
     }
 
     public function testCommentByIdShowSuccess(): void
@@ -111,7 +111,7 @@ class CommentTest extends TestCase
         ]);
         $response = $this->getJson('/api/comments/' . $comment->id);
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     public function testCommentByIdShowFailNotFound(): void
@@ -122,7 +122,7 @@ class CommentTest extends TestCase
 
         $response = $this->getJson('/api/comments/10000');
         $response
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 
     public function testCommentByIdShowFailBadContent(): void
@@ -133,7 +133,7 @@ class CommentTest extends TestCase
 
         $response = $this->getJson('/api/comments/wef');
         $response
-            ->assertStatus(500);
+            ->assertNotFound();
     }
 
 //
@@ -179,7 +179,7 @@ class CommentTest extends TestCase
 
         $response = $this->json('PUT', '/api/comments/' . $comment->id, $dataForUpdateComment);
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
         $this->assertDatabaseMissing(
             Comment::class,
             array_merge(
@@ -198,7 +198,7 @@ class CommentTest extends TestCase
             'title' => $this->faker->title,
         ]);
         $response
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 
     public function testCommentUpdateFailUnprocessable(): void
@@ -216,7 +216,7 @@ class CommentTest extends TestCase
 
         $response = $this->json('PUT', '/api/comments/' . $comment->id, $dataForUpdateComment);
         $response
-            ->assertStatus(422);
+            ->assertUnprocessable();
         $this->assertDatabaseMissing(
             Comment::class,
             array_merge(
@@ -238,7 +238,7 @@ class CommentTest extends TestCase
 
         $response = $this->json('Delete', '/api/comments/' . $comment->id);
         $response
-            ->assertStatus(204);
+            ->assertNoContent();
         $this->assertDatabaseMissing(Comment::class, [
             'id' => $comment->id
         ]);
@@ -252,7 +252,7 @@ class CommentTest extends TestCase
         ]);
         $response = $this->json('Delete', '/api/comments/' . $comment->id);
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
         $this->assertDatabaseHas(Comment::class, [
             'id' => $comment->id
         ]);
@@ -265,6 +265,6 @@ class CommentTest extends TestCase
         );
         $response = $this->json('Delete', '/api/comments/00000');
         $response
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 }

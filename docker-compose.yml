@@ -31,7 +31,7 @@ services:
             - 5432:5432
         restart: always
         environment:
-            POSTGRES_MULTIPLE_DATABASES: $DB_DATABASE, $DB_DATABASE_TEST
+            POSTGRES_DB: $DB_DATABASE
             POSTGRES_USER: $DB_USERNAME
             POSTGRES_PASSWORD: $DB_PASSWORD
         healthcheck:
@@ -42,7 +42,6 @@ services:
             start_period: 80s
         volumes:
             - pg-storage:/var/lib/postgresql/data:rw
-            - ./docker/pgsql/init.sql:/docker-entrypoint-initdb.d/init.sql
         networks:
             - api-network
 

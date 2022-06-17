@@ -27,7 +27,7 @@ class TagTest extends TestCase
     {
         $response = $this->getJson('/api/tags');
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     public function testTagsShowFailNotFound(): void
@@ -37,7 +37,7 @@ class TagTest extends TestCase
         );
         $response = $this->getJson('/api/tag');
         $response
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 
     public function testTagStoreSuccess(): void
@@ -62,7 +62,7 @@ class TagTest extends TestCase
         ];
         $response = $this->postJson('/api/tags', $tag);
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     public function testTagStoreFailUnprocessable(): void
@@ -77,7 +77,7 @@ class TagTest extends TestCase
         ];
         $response = $this->postJson('/api/tags', $tag);
         $response
-            ->assertStatus(422);
+            ->assertUnprocessable();
     }
 
     public function testTagByIdShowSuccess(): void
@@ -103,7 +103,7 @@ class TagTest extends TestCase
         ]);
         $response = $this->getJson('/api/tags/' . $tag->id);
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     public function testTagByIdShowFailNotFound(): void
@@ -114,7 +114,7 @@ class TagTest extends TestCase
 
         $response = $this->getJson('/api/tags/10000');
         $response
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 
     public function testTagByIdShowFailBadContent(): void
@@ -125,7 +125,7 @@ class TagTest extends TestCase
 
         $response = $this->getJson('/api/tags/wef');
         $response
-            ->assertStatus(500);
+            ->assertNotFound();
     }
 
     public function testTagUpdateSuccess(): void
@@ -166,7 +166,7 @@ class TagTest extends TestCase
         ];
         $response = $this->json('PUT', '/api/tags/' . $tag->id, $dataForUpdateTag);
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     public function testTagUpdateFailNotFound(): void
@@ -178,7 +178,7 @@ class TagTest extends TestCase
             'color' => $this->faker->hexColor()
         ]);
         $response
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 
     public function testTagUpdateFailUnprocessable(): void
@@ -197,7 +197,7 @@ class TagTest extends TestCase
 
         $response = $this->json('PUT', '/api/tags/' . $tag->id, $dataForUpdateTag);
         $response
-            ->assertStatus(422);
+            ->assertUnprocessable();
         $this->assertDatabaseMissing(
             Tag::class,
             array_merge(
@@ -219,7 +219,7 @@ class TagTest extends TestCase
 
         $response = $this->json('Delete', '/api/tags/' . $tag->id);
         $response
-            ->assertStatus(204);
+            ->assertNoContent();
         $this->assertDatabaseMissing(Tag::class, [
             'id' => $tag->id
         ]);
@@ -233,7 +233,7 @@ class TagTest extends TestCase
         ]);
         $response = $this->json('Delete', '/api/tags/' . $tag->id);
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
         $this->assertDatabaseHas(Tag::class, [
             'id' => $tag->id
         ]);
@@ -246,6 +246,6 @@ class TagTest extends TestCase
         );
         $response = $this->json('Delete', '/api/tags/00000');
         $response
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 }

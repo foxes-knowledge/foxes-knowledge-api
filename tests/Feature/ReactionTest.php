@@ -40,7 +40,7 @@ class ReactionTest extends TestCase
         ];
         $response = $this->postJson('/api/posts/' . $post->id . '/reactions', $postReaction);
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     public function testStoreReactionPostFailNotFound(): void
@@ -55,7 +55,7 @@ class ReactionTest extends TestCase
         ];
         $response = $this->postJson('/api/posts/1000/reactions', $postReaction);
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     public function testStoreReactionPostFailBadContent(): void
@@ -72,7 +72,7 @@ class ReactionTest extends TestCase
         ];
         $response = $this->postJson('/api/posts/' . $post->id . '/reactions', $postReaction);
         $response
-            ->assertStatus(422);
+            ->assertUnprocessable();
     }
 
     public function testReactionPostCancelSuccess(): void
@@ -96,7 +96,7 @@ class ReactionTest extends TestCase
         $response = $this->postJson('/api/posts/' . $post->id . '/reactions', $postReactionData);
 
         $response
-            ->assertStatus(204);
+            ->assertNoContent();
     }
 
     public function testReactionPostCancelFailUnauth(): void
@@ -118,7 +118,7 @@ class ReactionTest extends TestCase
         $response = $this->postJson('/api/posts/' . $post->id . '/reactions', $postReactionData);
 
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     public function testReactionPostCancelFailNotFound(): void
@@ -140,7 +140,7 @@ class ReactionTest extends TestCase
         $response = $this->postJson('/api/posts/' . $post->ids . '/reactions', $postReactionData);
 
         $response
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 
     public function testReactionPostUpdateSuccess(): void
@@ -202,7 +202,7 @@ class ReactionTest extends TestCase
         $response = $this->postJson('/api/posts/' . $post->id . '/reactions', $postReactionUpdate);
 
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
 
         $this->assertDatabaseMissing(
             Reaction::class,
@@ -236,7 +236,7 @@ class ReactionTest extends TestCase
         $response = $this->postJson('/api/posts/' . $post->ids . '/reactions', $postReactionUpdate);
 
         $response
-            ->assertStatus(404);
+            ->assertNotFound();
 
         $this->assertDatabaseMissing(
             Reaction::class,
@@ -275,7 +275,7 @@ class ReactionTest extends TestCase
         ];
         $response = $this->postJson('/api/comments/' . $comment->id . '/reactions', $commentReaction);
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     public function testStoreReactionCommentFailNotFound(): void
@@ -289,7 +289,7 @@ class ReactionTest extends TestCase
         ];
         $response = $this->postJson('/api/comments/1000/reactions', $commentReaction);
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     public function testStoreReactionCommentFailBadContent(): void
@@ -306,7 +306,7 @@ class ReactionTest extends TestCase
         ];
         $response = $this->postJson('/api/comments/' . $comment->id . '/reactions', $commentReaction);
         $response
-            ->assertStatus(422);
+            ->assertUnprocessable();
     }
 
     public function testReactionCommentCancelSuccess(): void
@@ -330,7 +330,7 @@ class ReactionTest extends TestCase
         $response = $this->postJson('/api/comments/' . $comment->id . '/reactions', $commentReactionData);
 
         $response
-            ->assertStatus(204);
+            ->assertNoContent();
     }
 
     public function testReactionCommentCancelFailUnauth(): void
@@ -352,7 +352,7 @@ class ReactionTest extends TestCase
         $response = $this->postJson('/api/comments/' . $comment->id . '/reactions', $commentReactionData);
 
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     public function testReactionCommentCancelFailNotFound(): void
@@ -374,7 +374,7 @@ class ReactionTest extends TestCase
         $response = $this->postJson('/api/comments/' . $comment->ids . '/reactions', $commentReactionData);
 
         $response
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 
     public function testReactionCommentUpdateSuccess(): void
@@ -436,7 +436,7 @@ class ReactionTest extends TestCase
         $response = $this->postJson('/api/comments/' . $comment->id . '/reactions', $commentReactionUpdate);
 
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
 
         $this->assertDatabaseMissing(
             Reaction::class,
@@ -470,7 +470,7 @@ class ReactionTest extends TestCase
         $response = $this->postJson('/api/comments/' . $comment->ids . '/reactions', $commentReactionUpdate);
 
         $response
-            ->assertStatus(404);
+            ->assertNotFound();
 
         $this->assertDatabaseMissing(
             Reaction::class,

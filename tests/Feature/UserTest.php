@@ -27,14 +27,14 @@ class UserTest extends TestCase
     {
         $response = $this->getJson('/api/users');
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     public function testUserShowFailNotFound(): void
     {
         $response = $this->getJson('/api/user');
         $response
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 
     public function testUserStoreSuccess(): void
@@ -72,7 +72,7 @@ class UserTest extends TestCase
         ];
         $response = $this->postJson('/api/users', $user);
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     public function testUserStoreFail(): void
@@ -93,7 +93,7 @@ class UserTest extends TestCase
         ];
         $response = $this->postJson('/api/users', $user);
         $response
-            ->assertStatus(422);
+            ->assertUnprocessable();
     }
 
     public function testUserByIdShowSuccess(): void
@@ -117,7 +117,7 @@ class UserTest extends TestCase
         ]);
         $response = $this->getJson('/api/users/' . $user->id);
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     public function testUserByIdShowFailNotFound(): void
@@ -128,7 +128,7 @@ class UserTest extends TestCase
 
         $response = $this->getJson('/api/users/10000');
         $response
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 
     public function testUserByIdShowFailBadContent(): void
@@ -139,7 +139,7 @@ class UserTest extends TestCase
 
         $response = $this->getJson('/api/users/wef');
         $response
-            ->assertStatus(500);
+            ->assertNotFound();
     }
 
 
@@ -174,7 +174,7 @@ class UserTest extends TestCase
             'bio' => $this->faker->text,
         ]);
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     public function testUserUpdateFailNotFound(): void
@@ -186,7 +186,7 @@ class UserTest extends TestCase
             'bio' => $this->faker->text,
         ]);
         $response
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 
     public function testUserUpdateFailUnprocessable(): void
@@ -203,7 +203,7 @@ class UserTest extends TestCase
 
         $response = $this->json('PUT', '/api/users/' . $user->id, $dataForUpdateUser);
         $response
-            ->assertStatus(422);
+            ->assertUnprocessable();
         $this->assertDatabaseMissing(
             User::class,
             array_merge(
@@ -222,7 +222,7 @@ class UserTest extends TestCase
         Sanctum::actingAs($user);
         $response = $this->json('Delete', '/api/users/' . $user->id);
         $response
-            ->assertStatus(204);
+            ->assertNoContent();
 
         $this->assertDatabaseMissing(User::class, [
             'id' => $user->id
@@ -234,7 +234,7 @@ class UserTest extends TestCase
         $user = User::factory()->create();
         $response = $this->json('Delete', '/api/users/' . $user->id);
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
         $this->assertDatabaseHas(User::class, [
             'id' => $user->id
         ]);
@@ -247,6 +247,6 @@ class UserTest extends TestCase
         );
         $response = $this->json('Delete', '/api/users/00000');
         $response
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 }

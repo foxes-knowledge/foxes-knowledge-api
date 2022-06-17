@@ -28,7 +28,7 @@ class PostTest extends TestCase
     {
         $response = $this->getJson('/api/posts');
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     public function testPostsShowFailNotFound(): void
@@ -38,7 +38,7 @@ class PostTest extends TestCase
         );
         $response = $this->getJson('/api/post');
         $response
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 
     public function testPostStoreSuccess(): void
@@ -68,7 +68,7 @@ class PostTest extends TestCase
         ];
         $response = $this->postJson('/api/posts', $post);
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     public function testPostStoreFailUnprocessable(): void
@@ -85,7 +85,7 @@ class PostTest extends TestCase
         ];
         $response = $this->postJson('/api/posts', $post);
         $response
-            ->assertStatus(422);
+            ->assertUnprocessable();
     }
 
     public function testPostByIdShowSuccess(): void
@@ -111,7 +111,7 @@ class PostTest extends TestCase
         ]);
         $response = $this->getJson('/api/posts/' . $post->id);
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     public function testPostByIdShowFailNotFound(): void
@@ -122,7 +122,7 @@ class PostTest extends TestCase
 
         $response = $this->getJson('/api/posts/10000');
         $response
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 
     public function testPostByIdShowFailBadContent(): void
@@ -133,7 +133,7 @@ class PostTest extends TestCase
 
         $response = $this->getJson('/api/posts/wef');
         $response
-            ->assertStatus(500);
+            ->assertNotFound();
     }
 
     public function testPostUpdateSuccess(): void
@@ -174,7 +174,7 @@ class PostTest extends TestCase
         ];
         $response = $this->json('PUT', '/api/posts/' . $post->id, $dataForUpdatePost);
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     public function testPostUpdateFailNotFound(): void
@@ -186,7 +186,7 @@ class PostTest extends TestCase
             'title' => $this->faker->title,
         ]);
         $response
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 
     public function testPostUpdateFailUnprocessable(): void
@@ -205,7 +205,7 @@ class PostTest extends TestCase
 
         $response = $this->json('PUT', '/api/posts/' . $post->id, $dataForUpdatePost);
         $response
-            ->assertStatus(422);
+            ->assertUnprocessable();
         $this->assertDatabaseMissing(
             Post::class,
             array_merge(
@@ -227,7 +227,7 @@ class PostTest extends TestCase
 
         $response = $this->json('Delete', '/api/posts/' . $post->id);
         $response
-            ->assertStatus(204);
+            ->assertNoContent();
         $this->assertDatabaseMissing(Post::class, [
             'id' => $post->id
         ]);
@@ -241,7 +241,7 @@ class PostTest extends TestCase
         ]);
         $response = $this->json('Delete', '/api/posts/' . $post->id);
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
         $this->assertDatabaseHas(Post::class, [
             'id' => $post->id
         ]);
@@ -254,6 +254,6 @@ class PostTest extends TestCase
         );
         $response = $this->json('Delete', '/api/posts/00000');
         $response
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 }

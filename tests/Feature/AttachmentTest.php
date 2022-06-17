@@ -27,7 +27,7 @@ class AttachmentTest extends TestCase
     {
         $response = $this->getJson('/api/attachments');
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     public function testAttachmentShowFailNotFound(): void
@@ -37,7 +37,7 @@ class AttachmentTest extends TestCase
         );
         $response = $this->getJson('/api/attachment');
         $response
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 
     public function testAttachmentByIdShowSuccess(): void
@@ -63,7 +63,7 @@ class AttachmentTest extends TestCase
         ]);
         $response = $this->getJson('/api/attachments/' . $attachment->id);
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     public function testAttachmentByIdShowFailNotFound(): void
@@ -74,7 +74,7 @@ class AttachmentTest extends TestCase
 
         $response = $this->getJson('/api/attachments/10000');
         $response
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 
     public function testAttachmentByIdShowFailBadContent(): void
@@ -85,7 +85,7 @@ class AttachmentTest extends TestCase
 
         $response = $this->getJson('/api/attachments/wef');
         $response
-            ->assertStatus(500);
+            ->assertNotFound();
     }
 
     public function testAttachmentDestroySuccess(): void
@@ -100,7 +100,7 @@ class AttachmentTest extends TestCase
 
         $response = $this->json('Delete', '/api/attachments/' . $attachment->id);
         $response
-            ->assertStatus(204);
+            ->assertNoContent();
         $this->assertDatabaseMissing(Attachment::class, [
             'id' => $attachment->id
         ]);
@@ -114,7 +114,7 @@ class AttachmentTest extends TestCase
         ]);
         $response = $this->json('Delete', '/api/attachments/' . $attachment->id);
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
         $this->assertDatabaseHas(Attachment::class, [
             'id' => $attachment->id
         ]);
@@ -127,6 +127,6 @@ class AttachmentTest extends TestCase
         );
         $response = $this->json('Delete', '/api/attachments/00000');
         $response
-            ->assertStatus(404);
+            ->assertNotFound();
     }
 }

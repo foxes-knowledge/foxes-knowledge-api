@@ -8,7 +8,6 @@ stages:
     - build
     - test
     - release
-    - publish
 
 variables:
     APP_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
@@ -32,6 +31,10 @@ cache:
     - docker load -i build-production.tar || true
     - docker load -i build-development.tar || true
     - docker load -i pull.tar || true
+
+.launch_app: &launch_app
+    - docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d --no-build knowledge-api
+    - docker exec knowledge-api composer i
 
 before_script:
     - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
@@ -75,6 +78,24 @@ Pull images:
         paths:
             - pull.tar
 
+Run all tests:
+    stage: test
+    tags:
+        - docker
+    script:
+        - *load_images
+        - *install_compose
+        - *launch_app
+        - docker exec knowledge-api composer test
+    needs:
+        - job: Build development image
+          artifacts: true
+        - job: Pull images
+          artifacts: true
+    retry:
+        max: 2
+        when: always
+
 Release image:
     stage: release
     when: on_success
@@ -88,26 +109,5 @@ Release image:
     needs:
         - job: Build production image
           artifacts: true
-
-Publish image:
-    stage: publish
-    when: on_success
-    image:
-        name: amazon/aws-cli:2.7.3
-        entrypoint: [""]
-    tags:
-        - docker
-    before_script:
-        - amazon-linux-extras install docker
-        - aws --version
-        - docker --version
-    script:
-        - *load_images
-        - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ECR_REGISTRY
-        - docker tag $APP_IMAGE $AWS_ECR_IMAGE
-        - docker push $AWS_ECR_IMAGE
-    needs:
-        - job: Build production image
-          artifacts: true
-    only:
-        - master
+        - job: Run all tests
+          artifacts: false

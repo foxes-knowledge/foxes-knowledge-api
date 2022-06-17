@@ -79,7 +79,7 @@ class AuthTest extends TestCase
         ];
         $response = $this->postJson('/api/auth/signup', $user);
         $response
-            ->assertStatus(422)
+            ->assertUnprocessable()
             ->assertDontSee('token');
     }
 
@@ -91,14 +91,14 @@ class AuthTest extends TestCase
 
         $response = $this->postJson('/api/auth/signout');
         $response
-            ->assertStatus(204);
+            ->assertNoContent();
     }
 
     public function testLogoutFail(): void
     {
         $response = $this->postJson('/api/auth/signout');
         $response
-            ->assertStatus(401);
+            ->assertUnauthorized();
     }
 
     public function testMeSuccess(): void
@@ -121,6 +121,6 @@ class AuthTest extends TestCase
 
         $response = $this->postJson('/api/auth/revoke');
         $response
-            ->assertStatus(204);
+            ->assertNoContent();
     }
 }
