@@ -8,7 +8,7 @@ RUN composer install --no-dev --no-scripts --no-autoloader --ignore-platform-req
 
 COPY . .
 
-RUN composer dump-autoload --optimize
+RUN composer dump-autoload -o
 
 FROM php:8.1.7-fpm-alpine3.16 AS production
 
@@ -30,7 +30,7 @@ RUN set -xe \
 
 COPY docker/etc /etc
 
-ARG S6_OVERLAY_VERSION=v3.1.0.1
+ARG S6_OVERLAY_VERSION=v3.1.1.0
 RUN S6_OVERLAY_RELEASE=https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION} \
     && curl -sSL $S6_OVERLAY_RELEASE/s6-overlay-noarch.tar.xz | tar Jxpf - -C / \
     && curl -sSL $S6_OVERLAY_RELEASE/s6-overlay-x86_64.tar.xz | tar Jxpf - -C /
