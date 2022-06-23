@@ -11,7 +11,7 @@
         "enabled": true,
         "actions": [
             {
-                "action": "php artisan fixer:fix --rules=@PSR12",
+                "action": "php vendor/bin/pint",
                 "options": [],
                 "conditions": []
             },

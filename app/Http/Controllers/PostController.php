@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\ReactionType;
 use App\Http\Requests\PostRequest\PostStoreRequest;
 use App\Http\Requests\PostRequest\PostUpdateRequest;
 use App\Models\Post;
