@@ -30,7 +30,7 @@ RUN set -xe \
 
 COPY docker/etc /etc
 
-ARG S6_OVERLAY_VERSION=v3.1.1.0
+ARG S6_OVERLAY_VERSION=v3.1.1.1
 RUN S6_OVERLAY_RELEASE=https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION} \
     && curl -sSL $S6_OVERLAY_RELEASE/s6-overlay-noarch.tar.xz | tar Jxpf - -C / \
     && curl -sSL $S6_OVERLAY_RELEASE/s6-overlay-x86_64.tar.xz | tar Jxpf - -C /
