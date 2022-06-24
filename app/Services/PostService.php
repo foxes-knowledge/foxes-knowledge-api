@@ -7,24 +7,38 @@ use App\Models\Post;
 
 class PostService
 {
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection Posts with counts
+     */
+    public function getPostsWithMediaCount()
+    {
+        return Post::with('user', 'tags', 'parent', 'child')
+            ->withCount([
+                'comments as comments',
+                'attachments as attachments',
+                'reactions as reactions'
+            ])
+            ->get();
+    }
+
     private function getCounts(): array
     {
         $counts = [];
         foreach (ReactionType::cases() as $type) {
-            $counts["reactions as {$type->value}"] = fn ($query) => $query->where('type', $type->value);
+            $counts["reactions as {$type->value}"] = fn($query) => $query->where('type', $type->value);
         }
 
         return $counts;
     }
 
     /**
-     * @return Post|Post[] $posts
+     * @return Post|Post[] Posts
      */
     public function getBaseQuery(int $postId = null)
     {
         $counts = [];
         foreach (ReactionType::cases() as $type) {
-            $counts["reactions as {$type->value}"] = fn ($query) => $query->where('type', $type->value);
+            $counts["reactions as {$type->value}"] = fn($query) => $query->where('type', $type->value);
         }
 
         if (!!$postId) {
@@ -49,11 +63,11 @@ class PostService
 
         $post->reactions = array_filter(
             $copy->toArray(),
-            fn ($value, $key) => in_array($key, ReactionType::values()),
+            fn($value, $key) => in_array($key, ReactionType::values()),
             ARRAY_FILTER_USE_BOTH
         );
 
-        return $post->load(['user', 'tags', 'attachments', 'parent', 'child']);
+        return $post->load(['user', 'tags', 'attachments', 'parent', 'child', 'comments']);
     }
 
     public function create(array $data): Post
