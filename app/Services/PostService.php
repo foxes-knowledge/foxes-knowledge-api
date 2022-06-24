@@ -4,11 +4,13 @@ namespace App\Services;
 
 use App\Enums\ReactionType;
 use App\Models\Post;
-use Illuminate\Database\Eloquent\Collection;
 
 class PostService
 {
-    public function getPostsWithMediaCount(): Collection|array
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection Posts with counts
+     */
+    public function getPostsWithMediaCount()
     {
         return Post::with('user', 'tags', 'parent', 'child')
             ->withCount(['comments', 'attachments', 'reactions'])
@@ -26,7 +28,7 @@ class PostService
     }
 
     /**
-     * @return Post|Post[] $posts
+     * @return Post|Post[] Posts
      */
     public function getBaseQuery(int $postId = null)
     {

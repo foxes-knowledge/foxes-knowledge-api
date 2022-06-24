@@ -61,7 +61,7 @@
             "phpstan analyze"
         ],
         "format": [
-            "@php artisan fixer:fix --rules=@PSR12"
+            "pint"
         ]
     },
     "extra": {
