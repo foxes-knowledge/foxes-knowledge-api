@@ -56,4 +56,14 @@ class TagController extends Controller
 
         return response([], Response::HTTP_NO_CONTENT);
     }
+
+    public function getTopFiveTags(): Response
+    {
+        $tags = Tag::withCount('posts')
+            ->orderBy('posts_count', 'desc')
+            ->take(5)
+            ->get();
+
+        return response($tags);
+    }
 }
