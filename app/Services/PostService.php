@@ -11,7 +11,11 @@ class PostService
     public function getPostsWithMediaCount(): Collection|array
     {
         return Post::with('user', 'tags', 'parent', 'child')
-            ->withCount(['comments', 'attachments', 'reactions'])
+            ->withCount([
+                'comments as comments',
+                'attachments as attachments',
+                'reactions as reactions'
+            ])
             ->get();
     }
 
@@ -19,7 +23,7 @@ class PostService
     {
         $counts = [];
         foreach (ReactionType::cases() as $type) {
-            $counts["reactions as {$type->value}"] = fn ($query) => $query->where('type', $type->value);
+            $counts["reactions as {$type->value}"] = fn($query) => $query->where('type', $type->value);
         }
 
         return $counts;
@@ -32,7 +36,7 @@ class PostService
     {
         $counts = [];
         foreach (ReactionType::cases() as $type) {
-            $counts["reactions as {$type->value}"] = fn ($query) => $query->where('type', $type->value);
+            $counts["reactions as {$type->value}"] = fn($query) => $query->where('type', $type->value);
         }
 
         if (!!$postId) {
@@ -57,11 +61,11 @@ class PostService
 
         $post->reactions = array_filter(
             $copy->toArray(),
-            fn ($value, $key) => in_array($key, ReactionType::values()),
+            fn($value, $key) => in_array($key, ReactionType::values()),
             ARRAY_FILTER_USE_BOTH
         );
 
-        return $post->load(['user', 'tags', 'attachments', 'parent', 'child','comments']);
+        return $post->load(['user', 'tags', 'attachments', 'parent', 'child', 'comments']);
     }
 
     public function create(array $data): Post
