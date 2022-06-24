@@ -59,8 +59,8 @@ class TagController extends Controller
 
     public function getTopFiveTags(): Response
     {
-        $tags = Tag::withCount('posts')
-            ->orderBy('posts_count', 'desc')
+        $tags = Tag::withCount('posts as posts')
+            ->orderBy('posts', 'desc')
             ->take(5)
             ->get();
 
