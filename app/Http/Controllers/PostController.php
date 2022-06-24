@@ -15,7 +15,7 @@ class PostController extends Controller
      */
     public function index(PostService $postService): Response
     {
-        return response($postService->getBaseQuery());
+        return response($postService->getPostsWithMediaCount());
     }
 
     /**
