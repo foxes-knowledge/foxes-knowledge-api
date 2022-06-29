@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TagRequest\TagStoreRequest;
 use App\Http\Requests\TagRequest\TagUpdateRequest;
 use App\Models\Tag;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class TagController extends Controller
@@ -12,11 +13,15 @@ class TagController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $tags = Tag::with(['posts', 'parent'])->get();
-
-        return response($tags);
+        $search = $request->input('search');
+        $tags = Tag::query()
+            ->with(['posts', 'parent']);
+        if(isset($search)) {
+            $tags ->where('name', 'ILIKE', "%{$search}%");
+        }
+        return response($tags->get());
     }
 
     /**
@@ -66,4 +71,5 @@ class TagController extends Controller
 
         return response($tags);
     }
+
 }

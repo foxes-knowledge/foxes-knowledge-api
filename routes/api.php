@@ -20,7 +20,6 @@ Route::controller(AuthController::class)->prefix('auth')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/tags/top',  [TagController::class, 'getTopFiveTags']);
-
     Route::apiResource('users', UserController::class);
     Route::apiResource('tags', TagController::class);
     Route::apiResource('posts', PostController::class);
