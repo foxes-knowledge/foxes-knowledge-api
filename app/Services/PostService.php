@@ -4,21 +4,38 @@ namespace App\Services;
 
 use App\Enums\ReactionType;
 use App\Models\Post;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class PostService
 {
-    /**
-     * @return \Illuminate\Database\Eloquent\Collection Posts with counts
-     */
-    public function getPostsWithMediaCount()
+    public function getPostsWithMediaCount(Request $request): LengthAwarePaginator
     {
-        return Post::with('user', 'tags', 'parent', 'child')
+        $search = $request->input('search');
+        $sorting = $request->input('sorting');
+        $posts = Post::query()
+            ->with('user', 'tags', 'parent', 'child')
             ->withCount([
                 'comments as comments',
                 'attachments as attachments',
                 'reactions as reactions'
-            ])
-            ->get();
+            ]);
+
+        if (isset($search)) {
+            $posts->where('title', 'ILIKE', "%{$search}%")
+                ->orWhere('content', 'ILIKE', "%{$search}%");
+        }
+        if (isset($sorting)) {
+            $sorting = explode(',', $sorting);
+
+            if (count($sorting) === 1) {
+                $sorting[] = 'desc';
+            }
+            $posts->orderBy($sorting[0], $sorting[1]);
+        }
+
+        return $posts->paginate(15);
     }
 
     private function getCounts(): array

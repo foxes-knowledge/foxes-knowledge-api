@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ReactionFactory extends Factory
 {
-    public const NUMBER = 20;
+    public const NUMBER = 90;
 
     /**
      * Define the model's default state.

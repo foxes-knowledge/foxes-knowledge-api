@@ -6,6 +6,7 @@ use App\Http\Requests\PostRequest\PostStoreRequest;
 use App\Http\Requests\PostRequest\PostUpdateRequest;
 use App\Models\Post;
 use App\Services\PostService;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class PostController extends Controller
@@ -13,9 +14,9 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(PostService $postService): Response
+    public function index(Request $request, PostService $postService): Response
     {
-        return response($postService->getPostsWithMediaCount());
+        return response($postService->getPostsWithMediaCount($request));
     }
 
     /**
@@ -55,4 +56,5 @@ class PostController extends Controller
 
         return response([], Response::HTTP_NO_CONTENT);
     }
+
 }
