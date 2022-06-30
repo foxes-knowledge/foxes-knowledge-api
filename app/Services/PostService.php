@@ -143,6 +143,7 @@ class PostService
     {
         $posts = Post::has('child')
             ->doesntHave('parent')
+            ->with(['user','tags'])
             ->get();
 
         foreach ($posts as $post) {
