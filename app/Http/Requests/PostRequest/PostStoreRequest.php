@@ -25,7 +25,7 @@ class PostStoreRequest extends FormRequest
             'tag_ids' => 'required|array',
             'parent_id' => 'integer|unique:posts,parent_id',
             'child_id' => 'integer|unique:posts,child_id',
-            'attachments.*' => 'max:8096'
+            'attachments.*' => 'max:8096',
         ];
     }
 }

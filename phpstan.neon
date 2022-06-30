@@ -8,19 +8,20 @@ parameters:
         - tests
 
     # Available levels: 0 - 9
-    level: 7
+    level: 0 # SET TO 7
 
     excludePaths:
         - ./app/Providers/*
         - ./app/Http/Controllers/AuthController.php
         - ./tests
 
-    ignoreErrors:
-        -
-            message: '#Property [a-zA-Z0-9\\_]+::\$reactions is not writable.#'
-            paths:
-                - app/Services/PostService.php
-                - app/Services/CommentService.php
+    # UNCOMMENT BELOW
+    # ignoreErrors:
+    #     -
+    #         message: '#Property [a-zA-Z0-9\\_]+::\$reactions is not writable.#'
+    #         paths:
+    #             - app/Services/PostService.php
+    #             - app/Services/CommentService.php
 
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false

@@ -92,13 +92,13 @@ class PostTest extends TestCase
     {
         $post = Post::factory()->create();
         $this->assertDatabaseHas(Post::class, [
-            'id' => $post->id
+            'id' => $post->id,
         ]);
         Sanctum::actingAs(
             User::factory()->create()
         );
 
-        $response = $this->getJson('/api/posts/' . $post->id);
+        $response = $this->getJson('/api/posts/'.$post->id);
         $response
             ->assertOk();
     }
@@ -107,9 +107,9 @@ class PostTest extends TestCase
     {
         $post = Post::factory()->create();
         $this->assertDatabaseHas(Post::class, [
-            'id' => $post->id
+            'id' => $post->id,
         ]);
-        $response = $this->getJson('/api/posts/' . $post->id);
+        $response = $this->getJson('/api/posts/'.$post->id);
         $response
             ->assertUnauthorized();
     }
@@ -140,7 +140,7 @@ class PostTest extends TestCase
     {
         $post = Post::factory()->create();
         $this->assertDatabaseHas(Post::class, [
-            'id' => $post->id
+            'id' => $post->id,
         ]);
         Sanctum::actingAs(
             User::factory()->create()
@@ -150,7 +150,7 @@ class PostTest extends TestCase
             'title' => $this->faker->title,
         ];
 
-        $response = $this->json('PUT', '/api/posts/' . $post->id, $dataForUpdatePost);
+        $response = $this->json('PUT', '/api/posts/'.$post->id, $dataForUpdatePost);
         $response
             ->assertCreated();
         $this->assertDatabaseHas(
@@ -166,13 +166,13 @@ class PostTest extends TestCase
     {
         $post = Post::factory()->create();
         $this->assertDatabaseHas(Post::class, [
-            'id' => $post->id
+            'id' => $post->id,
         ]);
 
         $dataForUpdatePost = [
             'title' => $this->faker->title,
         ];
-        $response = $this->json('PUT', '/api/posts/' . $post->id, $dataForUpdatePost);
+        $response = $this->json('PUT', '/api/posts/'.$post->id, $dataForUpdatePost);
         $response
             ->assertUnauthorized();
     }
@@ -193,7 +193,7 @@ class PostTest extends TestCase
     {
         $post = Post::factory()->create();
         $this->assertDatabaseHas(Post::class, [
-            'id' => $post->id
+            'id' => $post->id,
         ]);
         Sanctum::actingAs(
             User::factory()->create()
@@ -203,7 +203,7 @@ class PostTest extends TestCase
             'title' => '',
         ];
 
-        $response = $this->json('PUT', '/api/posts/' . $post->id, $dataForUpdatePost);
+        $response = $this->json('PUT', '/api/posts/'.$post->id, $dataForUpdatePost);
         $response
             ->assertUnprocessable();
         $this->assertDatabaseMissing(
@@ -219,17 +219,17 @@ class PostTest extends TestCase
     {
         $post = Post::factory()->create();
         $this->assertDatabaseHas(Post::class, [
-            'id' => $post->id
+            'id' => $post->id,
         ]);
         Sanctum::actingAs(
             User::factory()->create()
         );
 
-        $response = $this->json('Delete', '/api/posts/' . $post->id);
+        $response = $this->json('Delete', '/api/posts/'.$post->id);
         $response
             ->assertNoContent();
         $this->assertDatabaseMissing(Post::class, [
-            'id' => $post->id
+            'id' => $post->id,
         ]);
     }
 
@@ -237,13 +237,13 @@ class PostTest extends TestCase
     {
         $post = Post::factory()->create();
         $this->assertDatabaseHas(Post::class, [
-            'id' => $post->id
+            'id' => $post->id,
         ]);
-        $response = $this->json('Delete', '/api/posts/' . $post->id);
+        $response = $this->json('Delete', '/api/posts/'.$post->id);
         $response
             ->assertUnauthorized();
         $this->assertDatabaseHas(Post::class, [
-            'id' => $post->id
+            'id' => $post->id,
         ]);
     }
 

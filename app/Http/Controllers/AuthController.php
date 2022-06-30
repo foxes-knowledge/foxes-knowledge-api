@@ -5,10 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AuthRequest\SignInRequest;
 use App\Http\Requests\AuthRequest\SignUpRequest;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-
-use App\Services\UserService;
 
 class AuthController extends Controller
 {
@@ -27,8 +26,8 @@ class AuthController extends Controller
             'token' => [
                 'type' => 'Bearer',
                 'value' => $token->plainTextToken,
-                'ttl' => config('sanctum.expiration')
-            ]
+                'ttl' => config('sanctum.expiration'),
+            ],
         ], Response::HTTP_CREATED);
     }
 
@@ -37,9 +36,9 @@ class AuthController extends Controller
      */
     public function signIn(SignInRequest $request): Response
     {
-        if (!Auth::attempt($request->only('email', 'password'))) {
+        if (! Auth::attempt($request->only('email', 'password'))) {
             return response([
-                'message' => 'Invalid login credentials.'
+                'message' => 'Invalid login credentials.',
             ], Response::HTTP_CONFLICT);
         }
 
@@ -53,8 +52,8 @@ class AuthController extends Controller
             'token' => [
                 'type' => 'Bearer',
                 'value' => $token->plainTextToken,
-                'ttl' => config('sanctum.expiration')
-            ]
+                'ttl' => config('sanctum.expiration'),
+            ],
         ]);
     }
 
@@ -65,6 +64,7 @@ class AuthController extends Controller
     {
         /**
          * @var $token
+         *
          * @method delete() Delete token.
          */
         $token = Auth::user()->currentAccessToken();
@@ -82,7 +82,6 @@ class AuthController extends Controller
 
         return response([], Response::HTTP_NO_CONTENT);
     }
-
 
     /**
      * Get current user.

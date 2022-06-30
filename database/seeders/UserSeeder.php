@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
                 'email' => 'pashalitovka@gmail.com',
                 'password' => Hash::make('123456789'),
                 'bio' => 'My best bio.',
-                'color' => '#5b92e5'
+                'color' => '#5b92e5',
             ],
             [
                 'username' => 'navwie',
@@ -31,8 +31,8 @@ class UserSeeder extends Seeder
                 'email' => 'navwie@gmail.com',
                 'password' => Hash::make('123456789'),
                 'bio' => 'My best bio with emoji 😀.',
-                'color' => '#ff6e4a'
-            ]
+                'color' => '#ff6e4a',
+            ],
         ];
 
         foreach ($data as $user) {

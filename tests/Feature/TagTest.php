@@ -84,13 +84,13 @@ class TagTest extends TestCase
     {
         $tag = Tag::factory()->create();
         $this->assertDatabaseHas(Tag::class, [
-            'id' => $tag->id
+            'id' => $tag->id,
         ]);
         Sanctum::actingAs(
             User::factory()->create()
         );
 
-        $response = $this->getJson('/api/tags/' . $tag->id);
+        $response = $this->getJson('/api/tags/'.$tag->id);
         $response
             ->assertOk();
     }
@@ -99,9 +99,9 @@ class TagTest extends TestCase
     {
         $tag = Tag::factory()->create();
         $this->assertDatabaseHas(Tag::class, [
-            'id' => $tag->id
+            'id' => $tag->id,
         ]);
-        $response = $this->getJson('/api/tags/' . $tag->id);
+        $response = $this->getJson('/api/tags/'.$tag->id);
         $response
             ->assertUnauthorized();
     }
@@ -132,17 +132,17 @@ class TagTest extends TestCase
     {
         $tag = Tag::factory()->create();
         $this->assertDatabaseHas(Tag::class, [
-            'id' => $tag->id
+            'id' => $tag->id,
         ]);
         Sanctum::actingAs(
             User::factory()->create()
         );
 
         $dataForUpdateTag = [
-            'color' => $this->faker->hexColor()
+            'color' => $this->faker->hexColor(),
         ];
 
-        $response = $this->json('PUT', '/api/tags/' . $tag->id, $dataForUpdateTag);
+        $response = $this->json('PUT', '/api/tags/'.$tag->id, $dataForUpdateTag);
         $response
             ->assertCreated();
         $this->assertDatabaseHas(
@@ -158,13 +158,13 @@ class TagTest extends TestCase
     {
         $tag = Tag::factory()->create();
         $this->assertDatabaseHas(Tag::class, [
-            'id' => $tag->id
+            'id' => $tag->id,
         ]);
 
         $dataForUpdateTag = [
-            'color' => $this->faker->hexColor()
+            'color' => $this->faker->hexColor(),
         ];
-        $response = $this->json('PUT', '/api/tags/' . $tag->id, $dataForUpdateTag);
+        $response = $this->json('PUT', '/api/tags/'.$tag->id, $dataForUpdateTag);
         $response
             ->assertUnauthorized();
     }
@@ -175,7 +175,7 @@ class TagTest extends TestCase
             User::factory()->create()
         );
         $response = $this->json('PUT', '/api/tags/2434', [
-            'color' => $this->faker->hexColor()
+            'color' => $this->faker->hexColor(),
         ]);
         $response
             ->assertNotFound();
@@ -185,17 +185,17 @@ class TagTest extends TestCase
     {
         $tag = Tag::factory()->create();
         $this->assertDatabaseHas(Tag::class, [
-            'id' => $tag->id
+            'id' => $tag->id,
         ]);
         Sanctum::actingAs(
             User::factory()->create()
         );
 
         $dataForUpdateTag = [
-            'color' => ''
+            'color' => '',
         ];
 
-        $response = $this->json('PUT', '/api/tags/' . $tag->id, $dataForUpdateTag);
+        $response = $this->json('PUT', '/api/tags/'.$tag->id, $dataForUpdateTag);
         $response
             ->assertUnprocessable();
         $this->assertDatabaseMissing(
@@ -211,17 +211,17 @@ class TagTest extends TestCase
     {
         $tag = Tag::factory()->create();
         $this->assertDatabaseHas(Tag::class, [
-            'id' => $tag->id
+            'id' => $tag->id,
         ]);
         Sanctum::actingAs(
             User::factory()->create()
         );
 
-        $response = $this->json('Delete', '/api/tags/' . $tag->id);
+        $response = $this->json('Delete', '/api/tags/'.$tag->id);
         $response
             ->assertNoContent();
         $this->assertDatabaseMissing(Tag::class, [
-            'id' => $tag->id
+            'id' => $tag->id,
         ]);
     }
 
@@ -229,13 +229,13 @@ class TagTest extends TestCase
     {
         $tag = Tag::factory()->create();
         $this->assertDatabaseHas(Tag::class, [
-            'id' => $tag->id
+            'id' => $tag->id,
         ]);
-        $response = $this->json('Delete', '/api/tags/' . $tag->id);
+        $response = $this->json('Delete', '/api/tags/'.$tag->id);
         $response
             ->assertUnauthorized();
         $this->assertDatabaseHas(Tag::class, [
-            'id' => $tag->id
+            'id' => $tag->id,
         ]);
     }
 

@@ -16,11 +16,11 @@
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.12",
         "captainhook/captainhook": "^5.10",
-        "fakerphp/faker": "^1.19",
-        "laravel/pint": "^0.1.6",
+        "fakerphp/faker": "^1.0",
+        "laravel/pint": "^0.2",
         "nunomaduro/collision": "^6.2",
         "nunomaduro/larastan": "^2.1",
-        "phpstan/phpstan": "^1.7",
+        "phpstan/phpstan": "^1.8",
         "phpunit/phpunit": "^9.5",
         "spatie/laravel-ignition": "^1.0"
     },

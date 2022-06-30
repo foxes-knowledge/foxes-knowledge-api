@@ -18,9 +18,10 @@ class TagController extends Controller
         $search = $request->input('search');
         $tags = Tag::query()
             ->with(['posts', 'parent']);
-        if(isset($search)) {
-            $tags ->where('name', 'ILIKE', "%{$search}%");
+        if (isset($search)) {
+            $tags->where('name', 'ILIKE', "%{$search}%");
         }
+
         return response($tags->get());
     }
 
@@ -71,5 +72,4 @@ class TagController extends Controller
 
         return response($tags);
     }
-
 }
