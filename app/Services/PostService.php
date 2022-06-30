@@ -138,4 +138,23 @@ class PostService
 
         $post->attachments()->createMany($files);
     }
+
+    public function getListings(): array|\Illuminate\Database\Eloquent\Collection
+    {
+        $posts = Post::has('child')
+            ->doesntHave('parent')
+            ->get();
+
+        foreach ($posts as $post) {
+            $depth = 0;
+            $child = $post;
+            while ($child->child_id != null) {
+                $child = Post::findOrFail($child->child_id);
+                $depth++;
+            }
+            $post->child_depth = $depth;
+        }
+
+        return $posts;
+    }
 }

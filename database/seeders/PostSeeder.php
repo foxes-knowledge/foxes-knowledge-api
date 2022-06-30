@@ -23,7 +23,7 @@ class PostSeeder extends Seeder
             ],
             [
                 'user_id' => 1,
-                'post_id' => 1,
+                'parent_id' => 1,
                 'title' => 'Creating React project',
                 'content' => 'Today we will create our first React project.'
             ],

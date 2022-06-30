@@ -12,12 +12,15 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     use HasFactory;
+    use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
+
 
     protected $fillable = [
         'title',
         'content',
         'user_id',
-        'post_id',
+        'parent_id',
+        'child_id',
     ];
 
     public function user(): BelongsTo
@@ -47,11 +50,11 @@ class Post extends Model
 
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(self::class, 'post_id');
+        return $this->belongsTo(self::class, 'parent_id');
     }
 
-    public function child(): HasOne
+    public function child(): BelongsTo
     {
-        return $this->hasOne(self::class, 'post_id');
+        return $this->belongsTo(self::class, 'child_id');
     }
 }

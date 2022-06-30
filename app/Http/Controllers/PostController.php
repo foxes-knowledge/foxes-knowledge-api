@@ -57,4 +57,9 @@ class PostController extends Controller
         return response([], Response::HTTP_NO_CONTENT);
     }
 
+    public function getListings(PostService $postService): Response
+    {
+        return response($postService->getListings());
+    }
+
 }
