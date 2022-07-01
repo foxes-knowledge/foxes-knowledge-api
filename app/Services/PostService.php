@@ -41,7 +41,7 @@ class PostService
     {
         $counts = [];
         foreach (ReactionType::cases() as $type) {
-            $counts["reactions as {$type->value}"] = fn ($query) => $query->where('type', $type->value);
+            $counts["reactions as {$type->value}"] = fn($query) => $query->where('type', $type->value);
         }
 
         return $counts;
@@ -54,10 +54,10 @@ class PostService
     {
         $counts = [];
         foreach (ReactionType::cases() as $type) {
-            $counts["reactions as {$type->value}"] = fn ($query) => $query->where('type', $type->value);
+            $counts["reactions as {$type->value}"] = fn($query) => $query->where('type', $type->value);
         }
 
-        if ((bool) $postId) {
+        if ((bool)$postId) {
             return $this->withReactions(Post::find($postId));
         }
 
@@ -79,7 +79,7 @@ class PostService
 
         $post->reactions = array_filter(
             $copy->toArray(),
-            fn ($value, $key) => in_array($key, ReactionType::values()),
+            fn($value, $key) => in_array($key, ReactionType::values()),
             ARRAY_FILTER_USE_BOTH
         );
 
@@ -118,8 +118,8 @@ class PostService
     }
 
     /**
-     * @param  Post  $post
-     * @param  \Illuminate\Http\UploadedFile[]  $attachments
+     * @param Post $post
+     * @param \Illuminate\Http\UploadedFile[] $attachments
      */
     public function uploadAttachments($post, $attachments): void
     {
@@ -128,11 +128,11 @@ class PostService
         foreach ($attachments as $file) {
             $original = $file->getClientOriginalName();
             $filename = pathinfo($original, PATHINFO_FILENAME);
-            $filename = $post->id.str($filename)->slug().'-'.time();
+            $filename = $post->id . str($filename)->slug() . '-' . time();
             $extension = pathinfo($original, PATHINFO_EXTENSION);
             $picturePath = $file->storeAs('attachments', "$filename.$extension");
 
-            $files[]['file'] = \Illuminate\Support\Facades\Storage::url((string) $picturePath);
+            $files[]['file'] = \Illuminate\Support\Facades\Storage::url((string)$picturePath);
         }
 
         $post->attachments()->createMany($files);
@@ -151,8 +151,8 @@ class PostService
         foreach ($posts as $post) {
             $depth = 0;
             $child = $post;
-            while ($child->child_id != null) {
-                $child = Post::findOrFail($child->child_id);
+            while ($child->child != null) {
+                $child = Post::findOrFail($child->child->id);
                 $depth++;
             }
             $post->child_depth = $depth;

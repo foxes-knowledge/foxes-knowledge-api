@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Post extends Model
 {
@@ -16,8 +17,7 @@ class Post extends Model
         'title',
         'content',
         'user_id',
-        'parent_id',
-        'child_id',
+        'post_id',
     ];
 
     public function user(): BelongsTo
@@ -47,11 +47,13 @@ class Post extends Model
 
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(self::class, 'parent_id');
+        return $this->belongsTo(self::class, 'post_id');
     }
 
-    public function child(): BelongsTo
+    public function child(): HasOne
     {
-        return $this->belongsTo(self::class, 'child_id');
+        return $this->hasOne(self::class, 'post_id');
     }
+
+
 }
