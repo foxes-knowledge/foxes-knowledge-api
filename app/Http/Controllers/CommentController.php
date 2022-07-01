@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommentRequest\CommentStoreRequest;
+use App\Http\Requests\CommentRequest\CommentUpdateRequest;
 use App\Models\Comment;
 use App\Services\CommentService;
 use Illuminate\Http\Response;
-use App\Http\Requests\CommentRequest\CommentStoreRequest;
-use App\Http\Requests\CommentRequest\CommentUpdateRequest;
 
 class CommentController extends Controller
 {

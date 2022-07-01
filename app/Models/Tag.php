@@ -13,7 +13,7 @@ class Tag extends Model
 
     protected $fillable = [
         'name',
-        'color'
+        'color',
     ];
 
     public function posts(): BelongsToMany

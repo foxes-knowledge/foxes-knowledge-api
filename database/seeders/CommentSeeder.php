@@ -19,12 +19,12 @@ class CommentSeeder extends Seeder
             [
                 'user_id' => 2,
                 'post_id' => 1,
-                'content' => 'Nice post!'
+                'content' => 'Nice post!',
             ],
             [
                 'user_id' => 2,
                 'post_id' => 2,
-                'content' => 'Awesome!'
+                'content' => 'Awesome!',
             ],
         ];
 

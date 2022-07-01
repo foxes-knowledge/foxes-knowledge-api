@@ -19,13 +19,13 @@ class PostSeeder extends Seeder
             [
                 'user_id' => 1,
                 'title' => 'Introduction to React.js',
-                'content' => 'Welcome to React.js!'
+                'content' => 'Welcome to React.js!',
             ],
             [
                 'user_id' => 1,
                 'post_id' => 1,
                 'title' => 'Creating React project',
-                'content' => 'Today we will create our first React project.'
+                'content' => 'Today we will create our first React project.',
             ],
         ];
 

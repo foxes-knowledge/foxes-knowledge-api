@@ -20,7 +20,7 @@ class AttachmentFactory extends Factory
     {
         return [
             'post_id' => $this->faker->numberBetween(1, PostFactory::NUMBER),
-            'file' => $this->faker->filePath()
+            'file' => $this->faker->filePath(),
         ];
     }
 }

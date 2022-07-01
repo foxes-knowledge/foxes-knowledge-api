@@ -23,7 +23,7 @@ class ReactionFactory extends Factory
             'user_id' => $this->faker->numberBetween(1, UserFactory::NUMBER),
             'post_id' => $this->faker->numberBetween(1, PostFactory::NUMBER),
             'comment_id' => $this->faker->numberBetween(1, CommentFactory::NUMBER),
-            'type' => $this->faker->randomElement(ReactionType::values())
+            'type' => $this->faker->randomElement(ReactionType::values()),
         ];
     }
 }

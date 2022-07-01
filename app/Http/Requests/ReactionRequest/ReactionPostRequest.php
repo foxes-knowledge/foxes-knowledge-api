@@ -21,7 +21,7 @@ class ReactionPostRequest extends FormRequest
     public function rules()
     {
         return [
-            'type' => new Enum(ReactionType::class)
+            'type' => new Enum(ReactionType::class),
         ];
     }
 }

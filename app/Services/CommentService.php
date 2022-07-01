@@ -22,7 +22,7 @@ class CommentService
      */
     public function getBaseQuery(int $commentId = null)
     {
-        if (!!$commentId) {
+        if ((bool) $commentId) {
             return $this->withReactions(Comment::find($commentId));
         }
 

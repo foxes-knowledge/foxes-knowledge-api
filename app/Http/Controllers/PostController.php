@@ -24,7 +24,7 @@ class PostController extends Controller
      */
     public function store(PostStoreRequest $request, PostService $postService): Response
     {
-        $post = $postService->create((array)$request->validated());
+        $post = $postService->create((array) $request->validated());
 
         return response($post, Response::HTTP_CREATED);
     }
@@ -42,7 +42,7 @@ class PostController extends Controller
      */
     public function update(PostUpdateRequest $request, Post $post, PostService $postService): Response
     {
-        $post = $postService->update((array)$request->validated(), $post);
+        $post = $postService->update((array) $request->validated(), $post);
 
         return response($post, Response::HTTP_CREATED);
     }
@@ -57,4 +57,11 @@ class PostController extends Controller
         return response([], Response::HTTP_NO_CONTENT);
     }
 
+    /**
+     * Display posts listing
+     */
+    public function getListing(PostService $postService): Response
+    {
+        return response($postService->getListing());
+    }
 }

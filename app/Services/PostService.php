@@ -6,33 +6,32 @@ use App\Enums\ReactionType;
 use App\Models\Post;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 
 class PostService
 {
     public function getPostsWithMediaCount(Request $request): LengthAwarePaginator
     {
         $search = $request->input('search');
-        $sorting = $request->input('sorting');
+        $order = $request->input('order');
         $posts = Post::query()
             ->with('user', 'tags', 'parent', 'child')
             ->withCount([
                 'comments as comments',
                 'attachments as attachments',
-                'reactions as reactions'
+                'reactions as reactions',
             ]);
 
         if (isset($search)) {
             $posts->where('title', 'ILIKE', "%{$search}%")
                 ->orWhere('content', 'ILIKE', "%{$search}%");
         }
-        if (isset($sorting)) {
-            $sorting = explode(',', $sorting);
+        if (isset($order)) {
+            $order = explode(',', $order);
 
-            if (count($sorting) === 1) {
-                $sorting[] = 'desc';
+            if (count($order) === 1) {
+                $order[] = 'desc';
             }
-            $posts->orderBy($sorting[0], $sorting[1]);
+            $posts->orderBy($order[0], $order[1]);
         }
 
         return $posts->paginate(15);
@@ -42,7 +41,7 @@ class PostService
     {
         $counts = [];
         foreach (ReactionType::cases() as $type) {
-            $counts["reactions as {$type->value}"] = fn($query) => $query->where('type', $type->value);
+            $counts["reactions as {$type->value}"] = fn ($query) => $query->where('type', $type->value);
         }
 
         return $counts;
@@ -55,10 +54,10 @@ class PostService
     {
         $counts = [];
         foreach (ReactionType::cases() as $type) {
-            $counts["reactions as {$type->value}"] = fn($query) => $query->where('type', $type->value);
+            $counts["reactions as {$type->value}"] = fn ($query) => $query->where('type', $type->value);
         }
 
-        if (!!$postId) {
+        if ((bool) $postId) {
             return $this->withReactions(Post::find($postId));
         }
 
@@ -80,7 +79,7 @@ class PostService
 
         $post->reactions = array_filter(
             $copy->toArray(),
-            fn($value, $key) => in_array($key, ReactionType::values()),
+            fn ($value, $key) => in_array($key, ReactionType::values()),
             ARRAY_FILTER_USE_BOTH
         );
 
@@ -119,8 +118,8 @@ class PostService
     }
 
     /**
-     * @param Post $post
-     * @param \Illuminate\Http\UploadedFile[] $attachments
+     * @param  Post  $post
+     * @param  \Illuminate\Http\UploadedFile[]  $attachments
      */
     public function uploadAttachments($post, $attachments): void
     {
@@ -129,13 +128,36 @@ class PostService
         foreach ($attachments as $file) {
             $original = $file->getClientOriginalName();
             $filename = pathinfo($original, PATHINFO_FILENAME);
-            $filename = $post->id . str($filename)->slug() . '-' . time();
+            $filename = $post->id.str($filename)->slug().'-'.time();
             $extension = pathinfo($original, PATHINFO_EXTENSION);
             $picturePath = $file->storeAs('attachments', "$filename.$extension");
 
-            $files[]['file'] = \Illuminate\Support\Facades\Storage::url((string)$picturePath);
+            $files[]['file'] = \Illuminate\Support\Facades\Storage::url((string) $picturePath);
         }
 
         $post->attachments()->createMany($files);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection<\App\Models\Post> $posts
+     */
+    public function getListing()
+    {
+        $posts = Post::has('child')
+            ->doesntHave('parent')
+            ->with(['user', 'tags'])
+            ->get();
+
+        foreach ($posts as $post) {
+            $depth = 0;
+            $child = $post;
+            while ($child->child != null) {
+                $child = Post::findOrFail($child->child->id);
+                $depth++;
+            }
+            $post->child_depth = $depth; // @phpstan-ignore-line
+        }
+
+        return $posts;
     }
 }

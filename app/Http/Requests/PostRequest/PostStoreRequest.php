@@ -22,9 +22,9 @@ class PostStoreRequest extends FormRequest
             'title' => 'required|string|max:64',
             'content' => 'required|string|max:65500',
             'user_id' => 'required|integer|exists:users,id',
-            'post_id' => 'integer|exists:posts,id',
             'tag_ids' => 'required|array',
-            'attachments.*' => 'max:8096'
+            'post_id' => 'integer|unique:posts,id|exists:posts,id',
+            'attachments.*' => 'max:8096',
         ];
     }
 }

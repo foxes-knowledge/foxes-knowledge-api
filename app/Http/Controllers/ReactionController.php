@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
+use App\Http\Requests\ReactionRequest\ReactionCommentRequest;
+use App\Http\Requests\ReactionRequest\ReactionPostRequest;
 use App\Models\Comment;
+use App\Models\Post;
 use App\Models\Reaction;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\ReactionRequest\ReactionPostRequest;
-use App\Http\Requests\ReactionRequest\ReactionCommentRequest;
 
 class ReactionController extends Controller
 {
@@ -19,19 +19,20 @@ class ReactionController extends Controller
 
         $reaction = Reaction::where([
             ['user_id', $userId],
-            ['post_id', $post->id]
+            ['post_id', $post->id],
         ])->first();
 
-        if (!$reaction) {
+        if (! $reaction) {
             return response(Reaction::create([
                 'user_id' => $userId,
                 'post_id' => $post->id,
-                'type' => $type
+                'type' => $type,
             ]), Response::HTTP_CREATED);
         }
 
         if ($reaction->type->value === $type) {
             Reaction::destroy($reaction->id);
+
             return response(null, Response::HTTP_NO_CONTENT);
         }
 
@@ -47,19 +48,20 @@ class ReactionController extends Controller
 
         $reaction = Reaction::where([
             ['user_id', $userId],
-            ['comment_id', $comment->id]
+            ['comment_id', $comment->id],
         ])->first();
 
-        if (!$reaction) {
+        if (! $reaction) {
             return response(Reaction::create([
                 'user_id' => $userId,
                 'comment_id' => $comment->id,
-                'type' => $type
+                'type' => $type,
             ]), Response::HTTP_CREATED);
         }
 
         if ($reaction->type->value === $type) {
             Reaction::destroy($reaction->id);
+
             return response(null, Response::HTTP_NO_CONTENT);
         }
 

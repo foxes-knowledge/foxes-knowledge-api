@@ -24,7 +24,7 @@ class PostUpdateRequest extends FormRequest
             'user_id' => 'integer|exists:users,id',
             'post_id' => 'integer|exists:posts,id',
             'tag_ids' => 'array',
-            'attachments.*' => 'max:8096'
+            'attachments.*' => 'max:8096',
         ];
     }
 }
