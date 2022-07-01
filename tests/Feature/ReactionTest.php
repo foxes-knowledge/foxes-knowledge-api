@@ -23,7 +23,7 @@ class ReactionTest extends TestCase
             'post_id' => $post->id,
             'type' => ReactionType::UPVOTE,
         ];
-        $response = $this->postJson('/api/posts/'.$post->id.'/reactions', $postReaction);
+        $response = $this->postJson('/api/posts/' . $post->id . '/reactions', $postReaction);
         $response
             ->assertCreated();
     }
@@ -38,7 +38,7 @@ class ReactionTest extends TestCase
             'post_id' => $post->id,
             'type' => ReactionType::UPVOTE,
         ];
-        $response = $this->postJson('/api/posts/'.$post->id.'/reactions', $postReaction);
+        $response = $this->postJson('/api/posts/' . $post->id . '/reactions', $postReaction);
         $response
             ->assertUnauthorized();
     }
@@ -70,7 +70,7 @@ class ReactionTest extends TestCase
             'post_id' => '',
             'type' => '',
         ];
-        $response = $this->postJson('/api/posts/'.$post->id.'/reactions', $postReaction);
+        $response = $this->postJson('/api/posts/' . $post->id . '/reactions', $postReaction);
         $response
             ->assertUnprocessable();
     }
@@ -93,7 +93,7 @@ class ReactionTest extends TestCase
             $postReactionData
         ));
 
-        $response = $this->postJson('/api/posts/'.$post->id.'/reactions', $postReactionData);
+        $response = $this->postJson('/api/posts/' . $post->id . '/reactions', $postReactionData);
 
         $response
             ->assertNoContent();
@@ -115,7 +115,7 @@ class ReactionTest extends TestCase
             $postReactionData
         ));
 
-        $response = $this->postJson('/api/posts/'.$post->id.'/reactions', $postReactionData);
+        $response = $this->postJson('/api/posts/' . $post->id . '/reactions', $postReactionData);
 
         $response
             ->assertUnauthorized();
@@ -137,7 +137,7 @@ class ReactionTest extends TestCase
             $postReactionData
         ));
 
-        $response = $this->postJson('/api/posts/'.$post->ids.'/reactions', $postReactionData);
+        $response = $this->postJson('/api/posts/' . $post->ids . '/reactions', $postReactionData);
 
         $response
             ->assertNotFound();
@@ -165,7 +165,7 @@ class ReactionTest extends TestCase
             'type' => ReactionType::DOWNVOTE,
         ];
 
-        $response = $this->postJson('/api/posts/'.$post->id.'/reactions', $postReactionUpdate);
+        $response = $this->postJson('/api/posts/' . $post->id . '/reactions', $postReactionUpdate);
 
         $response
             ->assertStatus(201);
@@ -199,7 +199,7 @@ class ReactionTest extends TestCase
             'type' => ReactionType::DOWNVOTE,
         ];
 
-        $response = $this->postJson('/api/posts/'.$post->id.'/reactions', $postReactionUpdate);
+        $response = $this->postJson('/api/posts/' . $post->id . '/reactions', $postReactionUpdate);
 
         $response
             ->assertUnauthorized();
@@ -233,7 +233,7 @@ class ReactionTest extends TestCase
             'type' => ReactionType::DOWNVOTE,
         ];
 
-        $response = $this->postJson('/api/posts/'.$post->ids.'/reactions', $postReactionUpdate);
+        $response = $this->postJson('/api/posts/' . $post->ids . '/reactions', $postReactionUpdate);
 
         $response
             ->assertNotFound();
@@ -258,7 +258,7 @@ class ReactionTest extends TestCase
             'comment_id' => $comment->id,
             'type' => ReactionType::UPVOTE,
         ];
-        $response = $this->postJson('/api/comments/'.$comment->id.'/reactions', $commentReaction);
+        $response = $this->postJson('/api/comments/' . $comment->id . '/reactions', $commentReaction);
         $response
             ->assertCreated();
     }
@@ -273,7 +273,7 @@ class ReactionTest extends TestCase
             'comment_id' => $comment->id,
             'type' => ReactionType::UPVOTE,
         ];
-        $response = $this->postJson('/api/comments/'.$comment->id.'/reactions', $commentReaction);
+        $response = $this->postJson('/api/comments/' . $comment->id . '/reactions', $commentReaction);
         $response
             ->assertUnauthorized();
     }
@@ -304,7 +304,7 @@ class ReactionTest extends TestCase
             'comment_id' => '',
             'type' => '',
         ];
-        $response = $this->postJson('/api/comments/'.$comment->id.'/reactions', $commentReaction);
+        $response = $this->postJson('/api/comments/' . $comment->id . '/reactions', $commentReaction);
         $response
             ->assertUnprocessable();
     }
@@ -327,7 +327,7 @@ class ReactionTest extends TestCase
             $commentReactionData
         ));
 
-        $response = $this->postJson('/api/comments/'.$comment->id.'/reactions', $commentReactionData);
+        $response = $this->postJson('/api/comments/' . $comment->id . '/reactions', $commentReactionData);
 
         $response
             ->assertNoContent();
@@ -349,7 +349,7 @@ class ReactionTest extends TestCase
             $commentReactionData
         ));
 
-        $response = $this->postJson('/api/comments/'.$comment->id.'/reactions', $commentReactionData);
+        $response = $this->postJson('/api/comments/' . $comment->id . '/reactions', $commentReactionData);
 
         $response
             ->assertUnauthorized();
@@ -371,7 +371,7 @@ class ReactionTest extends TestCase
             $commentReactionData
         ));
 
-        $response = $this->postJson('/api/comments/'.$comment->ids.'/reactions', $commentReactionData);
+        $response = $this->postJson('/api/comments/' . $comment->ids . '/reactions', $commentReactionData);
 
         $response
             ->assertNotFound();
@@ -399,7 +399,7 @@ class ReactionTest extends TestCase
             'type' => ReactionType::DOWNVOTE,
         ];
 
-        $response = $this->postJson('/api/comments/'.$comment->id.'/reactions', $commentReactionUpdate);
+        $response = $this->postJson('/api/comments/' . $comment->id . '/reactions', $commentReactionUpdate);
 
         $response
             ->assertStatus(201);
@@ -433,7 +433,7 @@ class ReactionTest extends TestCase
             'type' => ReactionType::DOWNVOTE,
         ];
 
-        $response = $this->postJson('/api/comments/'.$comment->id.'/reactions', $commentReactionUpdate);
+        $response = $this->postJson('/api/comments/' . $comment->id . '/reactions', $commentReactionUpdate);
 
         $response
             ->assertUnauthorized();
@@ -467,7 +467,7 @@ class ReactionTest extends TestCase
             'type' => ReactionType::DOWNVOTE,
         ];
 
-        $response = $this->postJson('/api/comments/'.$comment->ids.'/reactions', $commentReactionUpdate);
+        $response = $this->postJson('/api/comments/' . $comment->ids . '/reactions', $commentReactionUpdate);
 
         $response
             ->assertNotFound();

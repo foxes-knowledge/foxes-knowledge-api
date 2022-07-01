@@ -19,8 +19,7 @@ class AuthTest extends TestCase
         ]);
         $response
             ->assertOk()
-            ->assertSee('user')
-            ->assertSee('token')
+            ->assertSee(['user', 'token'])
             ->assertJson([
                 'message' => 'Signed in successfully.',
             ]);
@@ -37,8 +36,7 @@ class AuthTest extends TestCase
             ->assertJson([
                 'message' => 'Invalid login credentials.',
             ])
-            ->assertDontSee('user')
-            ->assertDontSee('token');
+            ->assertDontSee(['user', 'token']);
     }
 
     public function testRegisterSuccess(): void
@@ -60,8 +58,7 @@ class AuthTest extends TestCase
             ->assertJson([
                 'message' => 'Signed up successfully.',
             ])
-            ->assertSee('user')
-            ->assertSee('token');
+            ->assertSee(['user', 'token']);
     }
 
     public function testRegisterFail(): void

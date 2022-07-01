@@ -88,6 +88,42 @@ class PostTest extends TestCase
             ->assertUnprocessable();
     }
 
+    public function testPostStoreFailNotFoundExistsKey(): void
+    {
+        Sanctum::actingAs(
+            User::factory()->create()
+        );
+
+        $post = [
+            'user_id' => '2323232323',
+            'post_id' => '32323232323',
+            'title' => $this->faker->realText(64),
+            'content' => $this->faker->realText(),
+            'tag_ids' => [3232332323],
+        ];
+        $response = $this->postJson('/api/posts', $post);
+        $response
+            ->assertUnprocessable();
+    }
+
+    public function testPostStoreFailUniquePost(): void
+    {
+        Sanctum::actingAs(
+            User::factory()->create()
+        );
+
+        $post = [
+            'user_id' => $this->faker->numberBetween(1, UserFactory::NUMBER),
+            'post_id' => $this->faker->numberBetween(1),
+            'title' => $this->faker->realText(64),
+            'content' => $this->faker->realText(),
+            'tag_ids' => [1],
+        ];
+        $response = $this->postJson('/api/posts', $post);
+        $response
+            ->assertUnprocessable();;
+    }
+
     public function testPostByIdShowSuccess(): void
     {
         $post = Post::factory()->create();
@@ -98,7 +134,7 @@ class PostTest extends TestCase
             User::factory()->create()
         );
 
-        $response = $this->getJson('/api/posts/'.$post->id);
+        $response = $this->getJson('/api/posts/' . $post->id);
         $response
             ->assertOk();
     }
@@ -109,7 +145,7 @@ class PostTest extends TestCase
         $this->assertDatabaseHas(Post::class, [
             'id' => $post->id,
         ]);
-        $response = $this->getJson('/api/posts/'.$post->id);
+        $response = $this->getJson('/api/posts/' . $post->id);
         $response
             ->assertUnauthorized();
     }
@@ -150,7 +186,7 @@ class PostTest extends TestCase
             'title' => $this->faker->title,
         ];
 
-        $response = $this->json('PUT', '/api/posts/'.$post->id, $dataForUpdatePost);
+        $response = $this->json('PUT', '/api/posts/' . $post->id, $dataForUpdatePost);
         $response
             ->assertCreated();
         $this->assertDatabaseHas(
@@ -172,7 +208,7 @@ class PostTest extends TestCase
         $dataForUpdatePost = [
             'title' => $this->faker->title,
         ];
-        $response = $this->json('PUT', '/api/posts/'.$post->id, $dataForUpdatePost);
+        $response = $this->json('PUT', '/api/posts/' . $post->id, $dataForUpdatePost);
         $response
             ->assertUnauthorized();
     }
@@ -203,7 +239,7 @@ class PostTest extends TestCase
             'title' => '',
         ];
 
-        $response = $this->json('PUT', '/api/posts/'.$post->id, $dataForUpdatePost);
+        $response = $this->json('PUT', '/api/posts/' . $post->id, $dataForUpdatePost);
         $response
             ->assertUnprocessable();
         $this->assertDatabaseMissing(
@@ -225,7 +261,7 @@ class PostTest extends TestCase
             User::factory()->create()
         );
 
-        $response = $this->json('Delete', '/api/posts/'.$post->id);
+        $response = $this->json('Delete', '/api/posts/' . $post->id);
         $response
             ->assertNoContent();
         $this->assertDatabaseMissing(Post::class, [
@@ -239,7 +275,7 @@ class PostTest extends TestCase
         $this->assertDatabaseHas(Post::class, [
             'id' => $post->id,
         ]);
-        $response = $this->json('Delete', '/api/posts/'.$post->id);
+        $response = $this->json('Delete', '/api/posts/' . $post->id);
         $response
             ->assertUnauthorized();
         $this->assertDatabaseHas(Post::class, [
@@ -256,4 +292,97 @@ class PostTest extends TestCase
         $response
             ->assertNotFound();
     }
+
+    public function testShowListingPostSuccess(): void
+    {
+        Sanctum::actingAs(
+            User::factory()->create()
+        );
+        $response = $this->getJson('/api/posts/listing');
+        $response
+            ->assertOk()
+            ->assertSee([
+                'title',
+                'user_id',
+                'post_id',
+                'child_depth'
+            ]);
+    }
+
+    public function testShowListingPostFailUnauth(): void
+    {
+        $response = $this->getJson('/api/posts/listing');
+        $response
+            ->assertUnauthorized()
+            ->assertDontSee([
+                'title',
+                'user_id',
+                'post_id',
+                'child_depth'
+            ]);
+    }
+
+    public function testShowListingPostNotFound(): void
+    {
+        Sanctum::actingAs(
+            User::factory()->create()
+        );
+        $response = $this->getJson('/api/posts/listings');
+        $response
+            ->assertNotFound()
+            ->assertDontSee([
+                'title',
+                'user_id',
+                'post_id',
+                'child_depth'
+            ]);
+    }
+
+    public function testPaginationPostSuccess(): void
+    {
+        Sanctum::actingAs(
+            User::factory()->create()
+        );
+        $response = $this->getJson('/api/posts');
+
+        $response
+            ->assertOk()
+            ->assertSee([
+                'current_page',
+                'data',
+                'next_page_url',
+                'path',
+                'per_page',
+                'prev_page_url',
+                'to',
+                'total'
+            ]);
+    }
+
+    public function testSortingByReactionSuccess(): void
+    {
+        Sanctum::actingAs(
+            User::factory()->create()
+        );
+        $post = Post::withCount('reactions as reactions')
+            ->orderByDesc('reactions')
+            ->first();
+
+        $response = $this->getJson('/api/posts?order=reactions');
+        $firstPaginationElement = json_decode($response->getContent())->data[0];
+
+        $this->assertEquals($post->id, $firstPaginationElement->id);
+        $this->assertEquals($post->reactions, $firstPaginationElement->reactions);
+        $response
+            ->assertOk();
+
+    }
+
+    public function testSortingByReactionFailUnauth(): void
+    {
+        $response = $this->getJson('/api/posts?order=reactions');
+        $response
+            ->assertUnauthorized();
+    }
+
 }
