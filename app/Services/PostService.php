@@ -12,7 +12,7 @@ class PostService
     public function getPostsWithMediaCount(Request $request): LengthAwarePaginator
     {
         $search = $request->input('search');
-        $sorting = $request->input('sorting');
+        $order = $request->input('order');
         $posts = Post::query()
             ->with('user', 'tags', 'parent', 'child')
             ->withCount([
@@ -25,13 +25,13 @@ class PostService
             $posts->where('title', 'ILIKE', "%{$search}%")
                 ->orWhere('content', 'ILIKE', "%{$search}%");
         }
-        if (isset($sorting)) {
-            $sorting = explode(',', $sorting);
+        if (isset($order)) {
+            $order = explode(',', $order);
 
-            if (count($sorting) === 1) {
-                $sorting[] = 'desc';
+            if (count($order) === 1) {
+                $order[] = 'desc';
             }
-            $posts->orderBy($sorting[0], $sorting[1]);
+            $posts->orderBy($order[0], $order[1]);
         }
 
         return $posts->paginate(15);
