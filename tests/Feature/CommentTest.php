@@ -98,7 +98,7 @@ class CommentTest extends TestCase
             User::factory()->create()
         );
 
-        $response = $this->getJson('/api/comments/' . $comment->id);
+        $response = $this->getJson('/api/comments/'.$comment->id);
         $response
             ->assertOk();
     }
@@ -109,7 +109,7 @@ class CommentTest extends TestCase
         $this->assertDatabaseHas(Comment::class, [
             'id' => $comment->id,
         ]);
-        $response = $this->getJson('/api/comments/' . $comment->id);
+        $response = $this->getJson('/api/comments/'.$comment->id);
         $response
             ->assertUnauthorized();
     }
@@ -152,7 +152,7 @@ class CommentTest extends TestCase
             'content' => $this->faker->realText,
         ];
 
-        $response = $this->json('PUT', '/api/comments/' . $comment->id, $dataForUpdateComment);
+        $response = $this->json('PUT', '/api/comments/'.$comment->id, $dataForUpdateComment);
         $response
             ->assertCreated();
         $this->assertDatabaseHas(
@@ -177,7 +177,7 @@ class CommentTest extends TestCase
             'content' => $this->faker->realText,
         ];
 
-        $response = $this->json('PUT', '/api/comments/' . $comment->id, $dataForUpdateComment);
+        $response = $this->json('PUT', '/api/comments/'.$comment->id, $dataForUpdateComment);
         $response
             ->assertUnauthorized();
         $this->assertDatabaseMissing(
@@ -214,7 +214,7 @@ class CommentTest extends TestCase
             'content' => '',
         ];
 
-        $response = $this->json('PUT', '/api/comments/' . $comment->id, $dataForUpdateComment);
+        $response = $this->json('PUT', '/api/comments/'.$comment->id, $dataForUpdateComment);
         $response
             ->assertUnprocessable();
         $this->assertDatabaseMissing(
@@ -235,7 +235,7 @@ class CommentTest extends TestCase
             'id' => $comment->id,
         ]);
 
-        $response = $this->json('Delete', '/api/comments/' . $comment->id);
+        $response = $this->json('Delete', '/api/comments/'.$comment->id);
         $response
             ->assertNoContent();
         $this->assertDatabaseMissing(Comment::class, [
@@ -249,7 +249,7 @@ class CommentTest extends TestCase
         $this->assertDatabaseHas(Comment::class, [
             'id' => $comment->id,
         ]);
-        $response = $this->json('Delete', '/api/comments/' . $comment->id);
+        $response = $this->json('Delete', '/api/comments/'.$comment->id);
         $response
             ->assertUnauthorized();
         $this->assertDatabaseHas(Comment::class, [

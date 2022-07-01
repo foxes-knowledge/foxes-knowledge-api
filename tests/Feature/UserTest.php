@@ -103,7 +103,7 @@ class UserTest extends TestCase
         ]);
         Sanctum::actingAs($user);
 
-        $response = $this->getJson('/api/users/' . $user->id);
+        $response = $this->getJson('/api/users/'.$user->id);
         $response
             ->assertOk();
     }
@@ -114,7 +114,7 @@ class UserTest extends TestCase
         $this->assertDatabaseHas(User::class, [
             'id' => $user->id,
         ]);
-        $response = $this->getJson('/api/users/' . $user->id);
+        $response = $this->getJson('/api/users/'.$user->id);
         $response
             ->assertUnauthorized();
     }
@@ -153,7 +153,7 @@ class UserTest extends TestCase
             'bio' => $this->faker->text,
         ];
 
-        $response = $this->json('PUT', '/api/users/' . $user->id, $dataForUpdateUser);
+        $response = $this->json('PUT', '/api/users/'.$user->id, $dataForUpdateUser);
         $response
             ->assertCreated();
 
@@ -199,7 +199,7 @@ class UserTest extends TestCase
             'bio' => '',
         ];
 
-        $response = $this->json('PUT', '/api/users/' . $user->id, $dataForUpdateUser);
+        $response = $this->json('PUT', '/api/users/'.$user->id, $dataForUpdateUser);
         $response
             ->assertUnprocessable();
         $this->assertDatabaseMissing(
@@ -218,7 +218,7 @@ class UserTest extends TestCase
             'id' => $user->id,
         ]);
         Sanctum::actingAs($user);
-        $response = $this->json('Delete', '/api/users/' . $user->id);
+        $response = $this->json('Delete', '/api/users/'.$user->id);
         $response
             ->assertNoContent();
 
@@ -230,7 +230,7 @@ class UserTest extends TestCase
     public function testUserDestroyFailUnauth(): void
     {
         $user = User::factory()->create();
-        $response = $this->json('Delete', '/api/users/' . $user->id);
+        $response = $this->json('Delete', '/api/users/'.$user->id);
         $response
             ->assertUnauthorized();
         $this->assertDatabaseHas(User::class, [

@@ -50,7 +50,7 @@ class AttachmentTest extends TestCase
             User::factory()->create()
         );
 
-        $response = $this->getJson('/api/attachments/' . $attachment->id);
+        $response = $this->getJson('/api/attachments/'.$attachment->id);
         $response
             ->assertOk();
     }
@@ -61,7 +61,7 @@ class AttachmentTest extends TestCase
         $this->assertDatabaseHas(Attachment::class, [
             'id' => $attachment->id,
         ]);
-        $response = $this->getJson('/api/attachments/' . $attachment->id);
+        $response = $this->getJson('/api/attachments/'.$attachment->id);
         $response
             ->assertUnauthorized();
     }
@@ -98,7 +98,7 @@ class AttachmentTest extends TestCase
             User::factory()->create()
         );
 
-        $response = $this->json('Delete', '/api/attachments/' . $attachment->id);
+        $response = $this->json('Delete', '/api/attachments/'.$attachment->id);
         $response
             ->assertNoContent();
         $this->assertDatabaseMissing(Attachment::class, [
@@ -112,7 +112,7 @@ class AttachmentTest extends TestCase
         $this->assertDatabaseHas(Attachment::class, [
             'id' => $attachment->id,
         ]);
-        $response = $this->json('Delete', '/api/attachments/' . $attachment->id);
+        $response = $this->json('Delete', '/api/attachments/'.$attachment->id);
         $response
             ->assertUnauthorized();
         $this->assertDatabaseHas(Attachment::class, [

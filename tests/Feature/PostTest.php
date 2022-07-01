@@ -121,7 +121,7 @@ class PostTest extends TestCase
         ];
         $response = $this->postJson('/api/posts', $post);
         $response
-            ->assertUnprocessable();;
+            ->assertUnprocessable();
     }
 
     public function testPostByIdShowSuccess(): void
@@ -134,7 +134,7 @@ class PostTest extends TestCase
             User::factory()->create()
         );
 
-        $response = $this->getJson('/api/posts/' . $post->id);
+        $response = $this->getJson('/api/posts/'.$post->id);
         $response
             ->assertOk();
     }
@@ -145,7 +145,7 @@ class PostTest extends TestCase
         $this->assertDatabaseHas(Post::class, [
             'id' => $post->id,
         ]);
-        $response = $this->getJson('/api/posts/' . $post->id);
+        $response = $this->getJson('/api/posts/'.$post->id);
         $response
             ->assertUnauthorized();
     }
@@ -186,7 +186,7 @@ class PostTest extends TestCase
             'title' => $this->faker->title,
         ];
 
-        $response = $this->json('PUT', '/api/posts/' . $post->id, $dataForUpdatePost);
+        $response = $this->json('PUT', '/api/posts/'.$post->id, $dataForUpdatePost);
         $response
             ->assertCreated();
         $this->assertDatabaseHas(
@@ -208,7 +208,7 @@ class PostTest extends TestCase
         $dataForUpdatePost = [
             'title' => $this->faker->title,
         ];
-        $response = $this->json('PUT', '/api/posts/' . $post->id, $dataForUpdatePost);
+        $response = $this->json('PUT', '/api/posts/'.$post->id, $dataForUpdatePost);
         $response
             ->assertUnauthorized();
     }
@@ -239,7 +239,7 @@ class PostTest extends TestCase
             'title' => '',
         ];
 
-        $response = $this->json('PUT', '/api/posts/' . $post->id, $dataForUpdatePost);
+        $response = $this->json('PUT', '/api/posts/'.$post->id, $dataForUpdatePost);
         $response
             ->assertUnprocessable();
         $this->assertDatabaseMissing(
@@ -261,7 +261,7 @@ class PostTest extends TestCase
             User::factory()->create()
         );
 
-        $response = $this->json('Delete', '/api/posts/' . $post->id);
+        $response = $this->json('Delete', '/api/posts/'.$post->id);
         $response
             ->assertNoContent();
         $this->assertDatabaseMissing(Post::class, [
@@ -275,7 +275,7 @@ class PostTest extends TestCase
         $this->assertDatabaseHas(Post::class, [
             'id' => $post->id,
         ]);
-        $response = $this->json('Delete', '/api/posts/' . $post->id);
+        $response = $this->json('Delete', '/api/posts/'.$post->id);
         $response
             ->assertUnauthorized();
         $this->assertDatabaseHas(Post::class, [
@@ -305,7 +305,7 @@ class PostTest extends TestCase
                 'title',
                 'user_id',
                 'post_id',
-                'child_depth'
+                'child_depth',
             ]);
     }
 
@@ -318,7 +318,7 @@ class PostTest extends TestCase
                 'title',
                 'user_id',
                 'post_id',
-                'child_depth'
+                'child_depth',
             ]);
     }
 
@@ -334,7 +334,7 @@ class PostTest extends TestCase
                 'title',
                 'user_id',
                 'post_id',
-                'child_depth'
+                'child_depth',
             ]);
     }
 
@@ -355,7 +355,7 @@ class PostTest extends TestCase
                 'per_page',
                 'prev_page_url',
                 'to',
-                'total'
+                'total',
             ]);
     }
 
@@ -375,7 +375,6 @@ class PostTest extends TestCase
         $this->assertEquals($post->reactions, $firstPaginationElement->reactions);
         $response
             ->assertOk();
-
     }
 
     public function testSortingByReactionFailUnauth(): void
@@ -384,5 +383,4 @@ class PostTest extends TestCase
         $response
             ->assertUnauthorized();
     }
-
 }
