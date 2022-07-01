@@ -54,6 +54,4 @@ class Post extends Model
     {
         return $this->hasOne(self::class, 'post_id');
     }
-
-
 }
