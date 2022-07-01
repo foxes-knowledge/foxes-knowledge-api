@@ -8,20 +8,29 @@ parameters:
         - tests
 
     # Available levels: 0 - 9
-    level: 0 # SET TO 7
+    level: 7
 
     excludePaths:
-        - ./app/Providers/*
-        - ./app/Http/Controllers/AuthController.php
         - ./tests
 
-    # UNCOMMENT BELOW
-    # ignoreErrors:
-    #     -
-    #         message: '#Property [a-zA-Z0-9\\_]+::\$reactions is not writable.#'
-    #         paths:
-    #             - app/Services/PostService.php
-    #             - app/Services/CommentService.php
+    ignoreErrors:
+        -
+            message: '#Property [a-zA-Z0-9\\_]+::\$reactions is not writable.#'
+            paths:
+                - app/Services/PostService.php
+                - app/Services/CommentService.php
+        -
+            message: '#Parameter \#1 \$content of function response expects [a-zA-Z0-9\\_|]+, [a-zA-Z0-9\\_]+LengthAwarePaginator given.#'
+            path: app\Http\Controllers\PostController.php
+        -
+            message: '#PHPDoc tag @var has invalid value \(\$token\): Unexpected token "\$token", expected type at offset 20#'
+            path: app\Http\Controllers\AuthController.php
+        -
+            message: '#Call to an undefined method [a-zA-Z0-9\\_]+::delete().#'
+            path: app\Http\Controllers\AuthController.php
+        -
+            message: '#Parameter \#1 \$key of method [a-zA-Z0-9\\_]+::by() expects string, int<min, -1>|int<1, max>|string|null given.#'
+            path: app\Providers\RouteServiceProvider.php
 
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false

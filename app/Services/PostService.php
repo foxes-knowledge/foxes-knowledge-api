@@ -155,7 +155,7 @@ class PostService
                 $child = Post::findOrFail($child->child->id);
                 $depth++;
             }
-            $post->child_depth = $depth;
+            $post->child_depth = $depth; // @phpstan-ignore-line
         }
 
         return $posts;
