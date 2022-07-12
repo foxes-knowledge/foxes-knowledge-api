@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\InviteRequest;
 use App\Http\Requests\UserRequest\UserStoreRequest;
 use App\Http\Requests\UserRequest\UserUpdateRequest;
+use App\Models\Invitation;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\Response;
+use Str;
 
 class UserController extends Controller
 {
@@ -56,5 +59,13 @@ class UserController extends Controller
         $user->delete();
 
         return response([], Response::HTTP_NO_CONTENT);
+    }
+
+    public function invite(InviteRequest $request): Response
+    {
+        $invite = Invitation::create($request->all());
+        $invite->token = Str::random(32);
+        $invite->save();
+        return response($invite, Response::HTTP_OK);
     }
 }

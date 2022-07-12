@@ -23,6 +23,7 @@ class SignUpRequest extends FormRequest
             'name' => 'string|max:32',
             'email' => 'required|string|max:256|unique:users,email',
             'password' => 'required|string|max:256|confirmed',
+            'token' => 'required|string|exists:invitations,token',
         ];
     }
 }

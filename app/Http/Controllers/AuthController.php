@@ -16,19 +16,8 @@ class AuthController extends Controller
      */
     public function signUp(SignUpRequest $request, UserService $userService): Response
     {
-        $user = $userService->create($request->validated());
-
-        $token = $user->createToken('auth_token');
-
-        return response([
-            'message' => 'Signed up successfully.',
-            'user' => $user->toArray(),
-            'token' => [
-                'type' => 'Bearer',
-                'value' => $token->plainTextToken,
-                'ttl' => config('sanctum.expiration'),
-            ],
-        ], Response::HTTP_CREATED);
+        [$response, $code] = $userService->create($request->validated());
+        return response($response, $code);
     }
 
     /**
