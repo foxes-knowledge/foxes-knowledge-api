@@ -6,9 +6,9 @@ networks:
         driver: bridge
 
 services:
-    knowledge-api:
-        container_name: $APP_NAME
-        image: $APP_NAME:latest
+    foxes-knowledge-api:
+        container_name: foxes-knowledge-api
+        image: foxes-knowledge-api:latest
         restart: unless-stopped
         build:
             context: .

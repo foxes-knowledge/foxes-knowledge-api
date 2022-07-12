@@ -9,6 +9,9 @@ parameters:
     # Available levels: 0 - 9
     level: 7
 
+    excludePaths:
+        - app\Mail
+
     ignoreErrors:
         -
             message: '#Property [a-zA-Z0-9\\_]+::\$reactions is not writable.#'

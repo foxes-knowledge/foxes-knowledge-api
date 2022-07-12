@@ -17,13 +17,15 @@ class AuthController extends Controller
      */
     public function signUp(SignUpRequest $request, UserService $userService): Response
     {
-        $invitation = Invitation::where('token', $request->query('token'))->first();
+        $invitation = Invitation::where('token', $request->token)->first();
 
-        if ($invitation->email !== $request->email) {
+        if (! $invitation || $invitation->email !== $request->email) {
             return response(['message' => 'Invalid access token'], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $user = $userService->create($request->validated());
+
+        $invitation->delete();
 
         $token = $user->createToken('auth_token');
 

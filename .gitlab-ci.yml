@@ -33,8 +33,8 @@ cache:
     - docker load -i pull.tar || true
 
 .launch_app: &launch_app
-    - docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d --no-build knowledge-api
-    - docker exec knowledge-api composer i
+    - docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d --no-build foxes-knowledge-api
+    - docker exec foxes-knowledge-api composer i
 
 before_script:
     - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
@@ -86,7 +86,7 @@ Run all tests:
         - *load_images
         - *install_compose
         - *launch_app
-        - docker exec knowledge-api composer test
+        - docker exec foxes-knowledge-api composer test
     needs:
         - job: Build development image
           artifacts: true

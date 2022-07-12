@@ -19,7 +19,7 @@ class InvitationRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|string|max:64|exists:users,email',
+            'email' => 'required|string|max:64|unique:users,email',
         ];
     }
 }

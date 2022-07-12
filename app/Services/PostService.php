@@ -34,7 +34,7 @@ class PostService
             $posts->orderBy($order[0], $order[1]);
         }
 
-        return $posts->fastPaginate(15);
+        return $posts->paginate(15);
     }
 
     private function getCounts(): array
