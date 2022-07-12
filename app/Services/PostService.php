@@ -4,15 +4,14 @@ namespace App\Services;
 
 use App\Enums\ReactionType;
 use App\Models\Post;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 
 class PostService
 {
-    public function getPostsWithMediaCount(Request $request): LengthAwarePaginator
+    public function getPostsWithMediaCount(Request $request): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
-        $search = $request->input('search');
-        $order = $request->input('order');
+        $search = (string) $request->query('search');
+        $order = (string) $request->query('order');
         $posts = Post::query()
             ->with('user', 'tags', 'parent', 'child')
             ->withCount([
@@ -25,6 +24,7 @@ class PostService
             $posts->where('title', 'ILIKE', "%{$search}%")
                 ->orWhere('content', 'ILIKE', "%{$search}%");
         }
+
         if (isset($order)) {
             $order = explode(',', $order);
 
@@ -34,7 +34,7 @@ class PostService
             $posts->orderBy($order[0], $order[1]);
         }
 
-        return $posts->paginate(15);
+        return $posts->fastPaginate(15);
     }
 
     private function getCounts(): array

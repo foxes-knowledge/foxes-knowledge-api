@@ -8,6 +8,7 @@
         "ext-apcu": "*",
         "ext-zend-opcache": "*",
         "guzzlehttp/guzzle": "^7.4",
+        "hammerstone/fast-paginate": "^0.1",
         "laravel/framework": "^9.0",
         "laravel/sanctum": "^2.15",
         "laravel/tinker": "^2.7",

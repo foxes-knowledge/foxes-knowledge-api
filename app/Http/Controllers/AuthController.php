@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthRequest\SignInRequest;
 use App\Http\Requests\AuthRequest\SignUpRequest;
+use App\Models\Invitation;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\Response;
@@ -16,9 +17,25 @@ class AuthController extends Controller
      */
     public function signUp(SignUpRequest $request, UserService $userService): Response
     {
-        [$response, $code] = $userService->create($request->validated());
+        $invitation = Invitation::where('token', $request->query('token'))->first();
 
-        return response($response, $code);
+        if ($invitation->email !== $request->email) {
+            return response(['message' => 'Invalid access token'], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $user = $userService->create($request->validated());
+
+        $token = $user->createToken('auth_token');
+
+        return response([
+            'message' => 'Signed up successfully.',
+            'user' => $user->toArray(),
+            'token' => [
+                'type' => 'Bearer',
+                'value' => $token->plainTextToken,
+                'ttl' => config('sanctum.expiration'),
+            ],
+        ], Response::HTTP_CREATED);
     }
 
     /**

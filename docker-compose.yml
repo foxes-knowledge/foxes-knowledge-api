@@ -69,15 +69,14 @@ services:
         networks:
             - api-network
 
-    swagger-ui:
-        container_name: swagger-ui
-        image: swaggerapi/swagger-ui:latest
+    mailhog:
+        container_name: mailhog
+        image: mailhog/mailhog:v1.0.1
+        logging:
+            driver: none
         ports:
-            - 8080:8080
-        volumes:
-            - ./doc:/usr/share/nginx/html/doc:ro
-        environment:
-            API_URL: doc/openapi.yaml
+            - 1025:1025
+            - 8025:8025
         networks:
             - api-network
 

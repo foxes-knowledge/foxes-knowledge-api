@@ -30,7 +30,7 @@ class TagController extends Controller
      */
     public function store(TagStoreRequest $request): Response
     {
-        $tag = Tag::create($request->all());
+        $tag = Tag::create($request->validated());
 
         return response($tag, Response::HTTP_CREATED);
     }
@@ -48,7 +48,7 @@ class TagController extends Controller
      */
     public function update(TagUpdateRequest $request, Tag $tag): Response
     {
-        $tag->update($request->all());
+        $tag->update($request->validated());
 
         return response($tag, Response::HTTP_CREATED);
     }

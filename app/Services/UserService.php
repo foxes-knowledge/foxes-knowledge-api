@@ -2,51 +2,27 @@
 
 namespace App\Services;
 
-use App\Models\Invitation;
 use App\Models\User;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class UserService
 {
-    public function create(array $data): array
+    public function create(array $data): User
     {
-        $invite = Invitation::where('token', $data['token'])->first();
+        $color = dechex(rand(0x000000, 0xFFFFFF));
 
-        if ($invite->email === $data['email']) {
-            $color = dechex(rand(0x000000, 0xFFFFFF));
+        $user = User::create([
+            ...$data,
+            'password' => Hash::make($data['password']),
+            'color' => "#$color",
+        ]);
 
-            $user = User::create([
-                ...$data,
-                'password' => Hash::make($data['password']),
-                'color' => "#$color",
-            ]);
-
-            if (isset($data['picture'])) {
-                $this->uploadPicture($user, $data['picture']);
-            }
-            $token = $user->createToken('auth_token');
-
-            return [
-                [
-                    'message' => 'Signed up successfully.',
-                    'user' => $user->toArray(),
-                    'token' => [
-                        'type' => 'Bearer',
-                        'value' => $token->plainTextToken,
-                        'ttl' => config('sanctum.expiration'),
-                    ],
-                ], Response::HTTP_CREATED,
-            ];
+        if (isset($data['picture'])) {
+            $this->uploadPicture($user, $data['picture']);
         }
 
-        return [
-            [
-                'message' => 'Invalid access token',
-            ],
-            Response::HTTP_UNPROCESSABLE_ENTITY,
-        ];
+        return $user;
     }
 
     public function update(array $data, User $user): User
