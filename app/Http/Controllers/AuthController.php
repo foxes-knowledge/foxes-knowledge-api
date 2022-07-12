@@ -17,6 +17,7 @@ class AuthController extends Controller
     public function signUp(SignUpRequest $request, UserService $userService): Response
     {
         [$response, $code] = $userService->create($request->validated());
+
         return response($response, $code);
     }
 

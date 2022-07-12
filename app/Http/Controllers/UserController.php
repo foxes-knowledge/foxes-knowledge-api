@@ -66,6 +66,7 @@ class UserController extends Controller
         $invite = Invitation::create($request->all());
         $invite->token = Str::random(32);
         $invite->save();
+
         return response($invite, Response::HTTP_OK);
     }
 }
