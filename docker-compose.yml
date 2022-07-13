@@ -45,6 +45,16 @@ services:
         networks:
             - api-network
 
+    redis:
+        container_name: redis
+        image: redis:7.0-alpine
+        ports:
+            - 6379:6379
+        volumes:
+            - redis-storage:/data:rw
+        networks:
+            - api-network
+
     minio:
         container_name: minio
         image: minio/minio:latest
@@ -83,6 +93,9 @@ services:
 volumes:
     pg-storage:
         name: pg-storage
+        driver: local
+    redis-storage:
+        name: redis-storage
         driver: local
     minio-storage:
         name: minio-storage

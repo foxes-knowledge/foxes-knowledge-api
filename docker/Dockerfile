@@ -13,16 +13,17 @@ RUN composer dump-autoload -o
 FROM php:8.1.8-fpm-alpine3.16 AS production
 
 RUN apk add --no-cache -t .production-deps \
-    nginx libpq
+    nginx
 
 RUN set -xe \
     && apk add --no-cache -t .build-deps $PHPIZE_DEPS \
     libpq-dev \
-    && pecl install -f apcu-5.1.21 \
+    && pecl install -f apcu-5.1.21 redis-5.3.7 \
     && docker-php-source extract \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-    && docker-php-ext-install -j$(nproc) pdo_pgsql pgsql \
-    && docker-php-ext-enable apcu \
+    && docker-php-ext-configure pcntl --enable-pcntl \
+    && docker-php-ext-install -j$(nproc) pdo_pgsql pgsql pcntl \
+    && docker-php-ext-enable apcu redis \
     && docker-php-source delete \
     && pecl clear-cache \
     && rm -rf /tmp/* \
