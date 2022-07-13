@@ -5,13 +5,12 @@ parameters:
 
     paths:
         - app
-        - tests
 
     # Available levels: 0 - 9
     level: 7
 
     excludePaths:
-        - ./tests
+        - app\Mail
 
     ignoreErrors:
         -
@@ -19,6 +18,9 @@ parameters:
             paths:
                 - app/Services/PostService.php
                 - app/Services/CommentService.php
+        -
+            message: '#Cannot cast array\|string\|null to string.#'
+            path: app/Services/PostService.php
         -
             message: '#Parameter \#1 \$content of function response expects [a-zA-Z0-9\\_|]+, [a-zA-Z0-9\\_]+LengthAwarePaginator given.#'
             path: app\Http\Controllers\PostController.php
@@ -31,6 +33,9 @@ parameters:
         -
             message: '#Parameter \#1 \$key of method [a-zA-Z0-9\\_]+::by() expects string, int<min, -1>|int<1, max>|string|null given.#'
             path: app\Providers\RouteServiceProvider.php
+        -
+            message: '#Parameter \#1 \$attributes of method [a-zA-Z0-9\\]+::create() expects array<string, mixed>, array<int|string, mixed> given.#'
+            path: app\Http\Controllers\InvitationController.php
 
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false

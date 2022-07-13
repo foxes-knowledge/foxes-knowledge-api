@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthRequest\SignInRequest;
 use App\Http\Requests\AuthRequest\SignUpRequest;
+use App\Models\Invitation;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\Response;
@@ -16,7 +17,15 @@ class AuthController extends Controller
      */
     public function signUp(SignUpRequest $request, UserService $userService): Response
     {
+        $invitation = Invitation::where('token', $request->token)->first();
+
+        if (! $invitation || $invitation->email !== $request->email) {
+            return response(['message' => 'Invalid access token'], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
         $user = $userService->create($request->validated());
+
+        $invitation->delete();
 
         $token = $user->createToken('auth_token');
 

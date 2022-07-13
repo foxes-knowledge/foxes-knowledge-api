@@ -24,7 +24,7 @@ class AttachmentController extends Controller
      */
     public function store(AttachmentStoreRequest $request): Response
     {
-        $attachment = Attachment::create($request->all());
+        $attachment = Attachment::create($request->validated());
 
         return response($attachment, Response::HTTP_CREATED);
     }
@@ -42,7 +42,7 @@ class AttachmentController extends Controller
      */
     public function update(AttachmentUpdateRequest $request, Attachment $attachment): Response
     {
-        $attachment->update($request->all());
+        $attachment->update($request->validated());
 
         return response($attachment, Response::HTTP_CREATED);
     }
