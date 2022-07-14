@@ -23,10 +23,8 @@ class InvitationController extends Controller
             ]);
         }
 
-        $url = 'http://localhost:3000/signup?token='.$invitation->token;
+        Mail::send(new InviteSent($invitation, Auth::user()));
 
-        Mail::send(new InviteSent($invitation, Auth::user(), $url));
-
-        return response($invitation, Response::HTTP_CREATED);
+        return response([], Response::HTTP_NO_CONTENT);
     }
 }

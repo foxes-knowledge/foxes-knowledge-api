@@ -5,15 +5,19 @@ namespace App\Mail;
 use App\Models\Invitation;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class InviteSent extends Mailable
+class InviteSent extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public Invitation $invitation, public User $user, public string $url)
+    public string $url;
+
+    public function __construct(public Invitation $invitation, public User $user)
     {
+        $this->url = 'http://localhost:3000/signup?token='.$invitation->token;
     }
 
     /**

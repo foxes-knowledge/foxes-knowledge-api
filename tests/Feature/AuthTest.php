@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Invitation;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Sanctum\Sanctum;
@@ -41,17 +42,29 @@ class AuthTest extends TestCase
 
     public function testRegisterSuccess(): void
     {
+        $invite = [
+            'email' => $this->faker->unique()->safeEmail(),
+            'token' => str()->random(32),
+        ];
+        $invitation = Invitation::create($invite);
+        $this->assertDatabaseHas(Invitation::class, array_merge(
+            ['id' => $invitation->id],
+            $invite
+        ));
+
         $user = [
             'username' => $this->faker->userName(),
             'name' => $this->faker->name(),
-            'email' => $this->faker->unique()->safeEmail(),
+            'email' => $invitation->email,
             'password' => '11111111',
             'password_confirmation' => '11111111',
             'isEmailPublic' => $this->faker->boolean(30),
             'picture' => $this->faker->imageUrl(),
             'bio' => $this->faker->text(200),
             'color' => $this->faker->hexColor(),
+            'token' => $invitation->token,
         ];
+
         $response = $this->postJson('/api/auth/signup', $user);
         $response
             ->assertCreated()
@@ -73,11 +86,31 @@ class AuthTest extends TestCase
             'picture' => '',
             'bio' => '',
             'color' => '',
+            'token' => '',
         ];
         $response = $this->postJson('/api/auth/signup', $user);
         $response
-            ->assertUnprocessable()
-            ->assertDontSee('token');
+            ->assertUnprocessable();
+    }
+
+    public function testRegisterFailInvalidToken(): void
+    {
+        $user = [
+            'username' => $this->faker->userName(),
+            'name' => $this->faker->name(),
+            'email' => $this->faker->email(),
+            'password' => '11111111',
+            'password_confirmation' => '11111111',
+            'isEmailPublic' => $this->faker->boolean(30),
+            'picture' => $this->faker->imageUrl(),
+            'bio' => $this->faker->text(200),
+            'color' => $this->faker->hexColor(),
+            'token' => '',
+        ];
+
+        $response = $this->postJson('/api/auth/signup', $user);
+        $response
+            ->assertUnprocessable();
     }
 
     public function testLogoutSuccess(): void

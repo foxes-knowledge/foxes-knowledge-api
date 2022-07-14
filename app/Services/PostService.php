@@ -10,8 +10,8 @@ class PostService
 {
     public function getPostsWithMediaCount(Request $request): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
-        $search = (string) $request->query('search');
-        $order = (string) $request->query('order');
+        $search = $request->input('search');
+        $order = $request->input('order');
         $posts = Post::query()
             ->with('user', 'tags', 'parent', 'child')
             ->withCount([
