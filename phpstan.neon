@@ -19,9 +19,6 @@ parameters:
                 - app/Services/PostService.php
                 - app/Services/CommentService.php
         -
-            message: '#Cannot cast array\|string\|null to string.#'
-            path: app/Services/PostService.php
-        -
             message: '#Parameter \#1 \$content of function response expects [a-zA-Z0-9\\_|]+, [a-zA-Z0-9\\_]+LengthAwarePaginator given.#'
             path: app\Http\Controllers\PostController.php
         -
