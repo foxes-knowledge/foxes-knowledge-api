@@ -20,7 +20,7 @@
         "barryvdh/laravel-ide-helper": "^2.12",
         "captainhook/captainhook": "^5.10",
         "fakerphp/faker": "^1.0",
-        "laravel/pint": "^0.2",
+        "laravel/pint": "^1.0",
         "nunomaduro/collision": "^6.2",
         "nunomaduro/larastan": "^2.1",
         "phpstan/phpstan": "^1.8",
