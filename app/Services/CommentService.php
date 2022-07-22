@@ -7,31 +7,21 @@ use App\Models\Comment;
 
 class CommentService
 {
-    private function getCounts(): array
-    {
-        $counts = [];
-        foreach (ReactionType::cases() as $type) {
-            $counts["reactions as {$type->value}"] = fn ($query) => $query->where('type', $type->value);
-        }
-
-        return $counts;
-    }
-
     /**
      * @return Comment|Comment[] $comments
      */
-    public function getBaseQuery(int $commentId = null)
+    public function getWithReactions(Comment $comment = null)
     {
-        if ((bool) $commentId) {
-            return $this->withReactions(Comment::find($commentId));
+        if ((bool) $comment) {
+            return $this->withReactions($comment);
         }
 
         /**
          * @var Comment[] $comments
          */
         $comments = [];
-        foreach (Comment::all() as $comment) {
-            $comments[] = $this->withReactions($comment);
+        foreach (Comment::all() as $item) {
+            $comments[] = $this->withReactions($item);
         }
 
         return $comments;
@@ -40,7 +30,13 @@ class CommentService
     public function withReactions(Comment $comment): Comment
     {
         $copy = Comment::find($comment->id);
-        $copy->loadCount($this->getCounts());
+
+        $counts = [];
+        foreach (ReactionType::cases() as $type) {
+            $counts["reactions as {$type->value}"] = fn ($query) => $query->where('type', $type->value);
+        }
+
+        $copy->loadCount($counts);
 
         $comment->reactions = array_filter(
             $copy->toArray(),

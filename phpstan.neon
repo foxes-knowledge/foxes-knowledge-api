@@ -15,12 +15,7 @@ parameters:
     ignoreErrors:
         -
             message: '#Property [a-zA-Z0-9\\_]+::\$reactions is not writable.#'
-            paths:
-                - app/Services/PostService.php
-                - app/Services/CommentService.php
-        -
-            message: '#Parameter \#1 \$content of function response expects [a-zA-Z0-9\\_|]+, [a-zA-Z0-9\\_]+LengthAwarePaginator given.#'
-            path: app\Http\Controllers\PostController.php
+            path: app/Services/CommentService.php
         -
             message: '#PHPDoc tag @var has invalid value \(\$token\): Unexpected token "\$token", expected type at offset 20#'
             path: app\Http\Controllers\AuthController.php
