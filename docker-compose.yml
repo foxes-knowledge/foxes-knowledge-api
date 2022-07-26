@@ -55,6 +55,22 @@ services:
         networks:
             - api-network
 
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:8.3.2
+        container_name: elasticsearch
+        environment:
+            - discovery.type=single-node
+            - cluster.name=$ELASTIC_INDEX
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+            - xpack.security.enabled=false
+            - xpack.security.http.ssl.enabled=false
+        volumes:
+            - elasticsearch-storage:/data:rw
+        ports:
+            - 9200:9200
+        networks:
+            - api-network
+
     minio:
         container_name: minio
         image: minio/minio:latest
@@ -96,6 +112,9 @@ volumes:
         driver: local
     redis-storage:
         name: redis-storage
+        driver: local
+    elasticsearch-storage:
+        name: elasticsearch-storage
         driver: local
     minio-storage:
         name: minio-storage

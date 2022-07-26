@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Services\Elasticsearch\ElasticsearchService;
+use Elastic\Elasticsearch\Client;
+use Elastic\Elasticsearch\ClientBuilder;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,9 +17,22 @@ class AppServiceProvider extends ServiceProvider
             } catch (\Throwable $ignored) {
             }
         }
+
+        $this->app->bind(ElasticsearchService::class, function () {
+            return new ElasticsearchService(
+                $this->app->make(Client::class)
+            );
+        });
+
+        $this->bindSearchClient();
     }
 
-    public function boot(): void
+    private function bindSearchClient(): void
     {
+        $this->app->bind(Client::class, function ($app) {
+            return ClientBuilder::create()
+                ->setHosts($app['config']->get('elasticsearch.config.hosts'))
+                ->build();
+        });
     }
 }

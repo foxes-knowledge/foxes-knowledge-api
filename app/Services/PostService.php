@@ -4,14 +4,25 @@ namespace App\Services;
 
 use App\Enums\ReactionType;
 use App\Models\Post;
+use App\Services\Elasticsearch\ElasticsearchService;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class PostService
 {
-    public function getPostsWithMediaCount(Request $request): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    public function getPostsWithMediaCount(Request $request): LengthAwarePaginator
     {
         $search = $request->input('search');
         $order = $request->input('order');
+
+        if (isset($search)) {
+            $elasticsearchService = app(ElasticsearchService::class);
+
+            return $elasticsearchService->search(Post::class, ['title', 'content'], $search)
+                ->with(['user', 'tags', 'parent', 'child'])
+                ->paginate(10);
+        }
+
         $posts = Post::query()
             ->with('user', 'tags', 'parent', 'child')
             ->withCount([
@@ -19,11 +30,6 @@ class PostService
                 'attachments as attachments',
                 'reactions as reactions',
             ]);
-
-        if (isset($search)) {
-            $posts->where('title', 'ILIKE', "%{$search}%")
-                ->orWhere('content', 'ILIKE', "%{$search}%");
-        }
 
         if (isset($order)) {
             $order = explode(',', $order);
@@ -34,7 +40,7 @@ class PostService
             $posts->orderBy($order[0], $order[1]);
         }
 
-        return $posts->paginate(15);
+        return $posts->paginate(10);
     }
 
     private function getCounts(): array

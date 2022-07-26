@@ -11,16 +11,15 @@ parameters:
 
     excludePaths:
         - app\Mail
-
+        - app\Console
+        - app\Observers
+        - app\Services\Elasticsearch\Searchable
     ignoreErrors:
         -
             message: '#Property [a-zA-Z0-9\\_]+::\$reactions is not writable.#'
             paths:
                 - app/Services/PostService.php
                 - app/Services/CommentService.php
-        -
-            message: '#Parameter \#1 \$content of function response expects [a-zA-Z0-9\\_|]+, [a-zA-Z0-9\\_]+LengthAwarePaginator given.#'
-            path: app\Http\Controllers\PostController.php
         -
             message: '#PHPDoc tag @var has invalid value \(\$token\): Unexpected token "\$token", expected type at offset 20#'
             path: app\Http\Controllers\AuthController.php
@@ -33,6 +32,10 @@ parameters:
         -
             message: '#Parameter \#1 \$attributes of method [a-zA-Z0-9\\]+::create() expects array<string, mixed>, array<int|string, mixed> given.#'
             path: app\Http\Controllers\InvitationController.php
+        -
+            message: '#Cannot call static method hydrateElasticsearchResult\(\) on array.#'
+            path: app\Services\Elasticsearch\ElasticsearchCollection.php
+
 
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
