@@ -48,7 +48,13 @@ class PostController extends Controller
      */
     public function store(PostStoreRequest $request, PostService $postService): Response
     {
-        $post = $postService->create($request->validated());
+        $data = $request->validated();
+
+        if (! isset($data['user_id'])) {
+            $data['user_id'] = auth()->id();
+        }
+
+        $post = $postService->create($data);
 
         return response($post, Response::HTTP_CREATED);
     }
@@ -66,7 +72,13 @@ class PostController extends Controller
      */
     public function update(PostUpdateRequest $request, Post $post, PostService $postService): Response
     {
-        $post = $postService->update($request->validated(), $post);
+        $data = $request->validated();
+
+        if (! isset($data['user_id'])) {
+            $data['user_id'] = auth()->id();
+        }
+
+        $post = $postService->update($data, $post);
 
         return response($post, Response::HTTP_CREATED);
     }
