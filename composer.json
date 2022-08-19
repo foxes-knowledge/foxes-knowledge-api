@@ -11,8 +11,8 @@
         "ext-zend-opcache": "*",
         "guzzlehttp/guzzle": "^7.4",
         "laravel/framework": "^9.0",
-        "laravel/horizon": "^5.9",
-        "laravel/sanctum": "^2.15",
+        "laravel/horizon": "^5.10",
+        "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "league/flysystem-aws-s3-v3": "^3.0"
     },

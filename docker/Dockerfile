@@ -10,7 +10,7 @@ COPY . .
 
 RUN composer dump-autoload -o
 
-FROM php:8.1.8-fpm-alpine AS production
+FROM php:8.1.9-fpm-alpine AS production
 
 RUN apk add --no-cache -t .production-deps \
     nginx
