@@ -51,7 +51,7 @@ RUN apk add --no-cache -t .development-deps \
 
 RUN set -xe \
     && apk add --no-cache -t .build-deps $PHPIZE_DEPS \
-    && pecl install -f xdebug-3.1.5 \
+    && pecl install -f xdebug \
     && docker-php-ext-enable xdebug \
     && pecl clear-cache \
     && apk del --purge .build-deps

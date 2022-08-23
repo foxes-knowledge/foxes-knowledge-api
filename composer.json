@@ -13,7 +13,6 @@
         "laravel/framework": "^9.0",
         "laravel/horizon": "^5.10",
         "laravel/sanctum": "^3.0",
-        "laravel/tinker": "^2.7",
         "league/flysystem-aws-s3-v3": "^3.0"
     },
     "require-dev": {
@@ -21,6 +20,7 @@
         "captainhook/captainhook": "^5.10",
         "fakerphp/faker": "^1.0",
         "laravel/pint": "^1.0",
+        "laravel/tinker": "^2.7",
         "nunomaduro/collision": "^6.2",
         "nunomaduro/larastan": "^2.1",
         "phpstan/phpstan": "^1.8",
