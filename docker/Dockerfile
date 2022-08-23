@@ -10,7 +10,7 @@ COPY . .
 
 RUN composer dump-autoload -o
 
-FROM php:8.1.8-fpm-alpine AS production
+FROM php:8.1.9-fpm-alpine AS production
 
 RUN apk add --no-cache -t .production-deps \
     nginx
@@ -51,7 +51,7 @@ RUN apk add --no-cache -t .development-deps \
 
 RUN set -xe \
     && apk add --no-cache -t .build-deps $PHPIZE_DEPS \
-    && pecl install -f xdebug-3.1.5 \
+    && pecl install -f xdebug \
     && docker-php-ext-enable xdebug \
     && pecl clear-cache \
     && apk del --purge .build-deps

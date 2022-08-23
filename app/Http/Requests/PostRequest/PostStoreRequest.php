@@ -21,7 +21,7 @@ class PostStoreRequest extends FormRequest
         return [
             'title' => 'required|string|max:64',
             'content' => 'required|string|max:65500',
-            'user_id' => 'required|integer|exists:users,id',
+            'user_id' => 'integer|exists:users,id',
             'tag_ids' => 'required|array',
             'post_id' => 'integer|unique:posts,id|exists:posts,id',
             'attachments.*' => 'max:8096',

@@ -2,90 +2,10 @@
 
 namespace App\Services;
 
-use App\Enums\ReactionType;
 use App\Models\Post;
-use Illuminate\Http\Request;
 
 class PostService
 {
-    public function getPostsWithMediaCount(Request $request): \Illuminate\Contracts\Pagination\LengthAwarePaginator
-    {
-        $search = $request->input('search');
-        $order = $request->input('order');
-        $posts = Post::query()
-            ->with('user', 'tags', 'parent', 'child')
-            ->withCount([
-                'comments as comments',
-                'attachments as attachments',
-                'reactions as reactions',
-            ]);
-
-        if (isset($search)) {
-            $posts->where('title', 'ILIKE', "%{$search}%")
-                ->orWhere('content', 'ILIKE', "%{$search}%");
-        }
-
-        if (isset($order)) {
-            $order = explode(',', $order);
-
-            if (count($order) === 1) {
-                $order[] = 'desc';
-            }
-            $posts->orderBy($order[0], $order[1]);
-        }
-
-        return $posts->paginate(15);
-    }
-
-    private function getCounts(): array
-    {
-        $counts = [];
-        foreach (ReactionType::cases() as $type) {
-            $counts["reactions as {$type->value}"] = fn ($query) => $query->where('type', $type->value);
-        }
-
-        return $counts;
-    }
-
-    /**
-     * @return Post|Post[] Posts
-     */
-    public function getBaseQuery(int $postId = null)
-    {
-        $counts = [];
-        foreach (ReactionType::cases() as $type) {
-            $counts["reactions as {$type->value}"] = fn ($query) => $query->where('type', $type->value);
-        }
-
-        if ((bool) $postId) {
-            return $this->withReactions(Post::find($postId));
-        }
-
-        /**
-         * @var Post[] $posts
-         */
-        $posts = [];
-        foreach (Post::all() as $post) {
-            $posts[] = $this->withReactions($post);
-        }
-
-        return $posts;
-    }
-
-    public function withReactions(Post $post): Post
-    {
-        $copy = Post::find($post->id);
-        $copy->loadCount($this->getCounts());
-
-        $post->reactions = array_filter(
-            $copy->toArray(),
-            fn ($value, $key) => in_array($key, ReactionType::values()),
-            ARRAY_FILTER_USE_BOTH
-        );
-
-        return $post->load(['user', 'tags', 'attachments', 'parent', 'child', 'comments']);
-    }
-
     public function create(array $data): Post
     {
         $post = Post::create($data);
@@ -136,28 +56,5 @@ class PostService
         }
 
         $post->attachments()->createMany($files);
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Collection<\App\Models\Post> $posts
-     */
-    public function getListing()
-    {
-        $posts = Post::has('child')
-            ->doesntHave('parent')
-            ->with(['user', 'tags'])
-            ->get();
-
-        foreach ($posts as $post) {
-            $depth = 0;
-            $child = $post;
-            while ($child->child != null) {
-                $child = Post::findOrFail($child->child->id);
-                $depth++;
-            }
-            $post->child_depth = $depth; // @phpstan-ignore-line
-        }
-
-        return $posts;
     }
 }
